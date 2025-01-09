@@ -1,0 +1,159 @@
+﻿/*
+    Name: Structure.css
+    Description: Generalized stylings for all elements. Includes generic flexing and highly used classes
+    Author: Harrison F 17/6/2020
+*/
+
+
+/*ELEMENTS*/
+.article,
+article {
+    display: flex;
+    flex-direction: column;
+}
+
+
+section {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.section {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+/*CLASSES*/
+
+/*Positioning*/
+.around {
+    justify-content: space-around;
+}
+
+.right {
+    justify-content: right;
+}
+
+
+.between {
+    justify-content: space-between;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.center {
+    justify-content: center;
+}
+
+.end {
+    justify-content: flex-end;
+}
+
+.itemsCenter {
+    align-items: center;
+}
+
+.itemsTop {
+    align-items: flex-start;
+}
+
+.itemsEnd {
+    align-items: flex-end;
+}
+
+.selfStart {
+align-self: flex-start;
+}
+
+.selfCenter {
+    margin: auto;
+    align-self: center;
+}
+
+.selfEnd {
+    align-self: flex-end;
+}
+
+.fullHeight {
+    height: 100%;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.fullSize {
+    height: 100%;
+    width: 100%;
+}
+
+.wrap {
+    flex-wrap: wrap;
+}
+
+.tab {
+    margin-bottom: 2em;
+    display: flex;
+    flex-direction: column;
+    background-color: powderblue;
+}
+
+/*Highly common classes*/
+.body {
+    min-height: 100vh;
+}
+
+.dialog {
+    padding: 2%;
+}
+
+.largeTxt {
+    font-weight: bold;
+    font-size: larger;
+    color: #337AB7;
+    white-space: nowrap;
+}
+
+.paper {
+    padding: 1%;
+    border-radius: 5px;
+    background-color: white;
+    transition: width 1s, height 1s;
+    box-shadow: 
+        0px 2px 1px -1px rgba(0,0,0,0.2),
+        0px 1px 1px 0px rgba(0,0,0,0.14),
+        0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+
+.appear {
+    overflow: hidden;
+    animation-duration: 3s;
+    animation-name: dropdown;
+}
+
+.smallTxt {
+    font-size: 14px;
+}
+
+.tinyTxt {
+    font-size: 9px;
+}
+
+
+.hover:hover:not(.disabled) {
+    background-color: #c1c1c1;
+}
+
+@keyframes dropdown {
+    0% {
+        max-height: 0px
+    }
+
+    100% {
+        max-height: 1000px
+    }
+}

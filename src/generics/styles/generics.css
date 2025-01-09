@@ -1,0 +1,59 @@
+﻿/*
+    Name: generics.css
+    Description: A stylesheet for all the generic modules and items
+    Author: Harrison F 24/6/2020
+*/
+
+/*ELEMENTS*/
+
+
+
+/*CLASSES*/
+/*Form fields*/
+.formGroup { /*Label and input group*/
+    align-items: center;
+    margin: 5px 0;
+}
+
+.formLabel {
+    font-weight: bold;
+    font-size: 18px;
+    width: 120px;
+}
+
+.formInput {
+    height: 20px;
+    align-self: flex-start;
+}
+
+.checkLabel {
+    font-weight: bold;
+    font-size: 18px;
+    padding-top: 18px;
+}
+
+
+.whiteIcon {
+    color: white;
+}
+
+.errMsg {
+    color: red;
+}
+
+
+/*IDs*/
+#excelDownload {
+    min-width: 35px;
+}
+
+#pageDetails {
+    margin-right: 1%;
+    width: 220px;
+}
+
+
+#titleIcon {
+    margin: 0 10% 15% 10%;
+}
+

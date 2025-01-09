@@ -1,0 +1,2655 @@
+// Here you can add other stylesinputdiv
+
+// src/styles/main.scss
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+
+// Your custom SCSS styles
+
+
+
+.Lookupcs {
+  margin-top: -80px;
+}
+
+.loginH {
+  background-color: #d6dde8;
+  font-weight: 200;
+  border-color: #797e82;
+  text-decoration: bold;
+  text-align: center;
+}
+
+.clockInH {
+  background-color: #b3cee5;
+  border-color: #5f87a8;
+  text-align: center;
+}
+//#d6dde8
+.breakInH {
+  background-color: #79a9d2;
+  border-color: #416785;
+  text-align: center;
+}
+//loginlocation button css
+.loginB {
+  background-color: #d6dde8;
+  text-align: center;
+  color: black;
+  border: 2px solid #2d6386;
+}
+.loginB:hover {
+  background-color: #117fc4;
+  color: white;
+}
+
+.loginB:active {
+  background-color: rgb(223, 206, 183);
+  transform: translateY(4px);
+}
+
+//clockinlocation button css
+.clockInB {
+  background-color: #b3cee5;
+  text-align: center;
+  color: black;
+  border: 2px solid #2a6389;
+}
+.clockInB:hover {
+  background-color: #16689f;
+  color: white;
+}
+
+.clockInB:active {
+  background-color: #b3cee5;
+  transform: translateY(4px);
+}
+
+//breakinlocation button css
+.breakInB {
+  background-color: #79a9d2;
+  color: black;
+  text-align: center;
+  border: 2px solid #1a5074;
+}
+
+.breakInB:hover {
+  background-color: #1a5074;
+  color: white;
+}
+
+.breakInB :active {
+  background-color: rgb(192, 113, 113);
+  transform: translateY(4px);
+}
+
+.yellowstatus {
+  background-color: yellow;
+}
+.greenstatus {
+  background-color: green;
+}
+
+.headerEQ {
+  // background: linear-gradient(to right, #990000 0%, #ffffff 100%);
+  background: linear-gradient(to right, #990000 0%, #ffffff 100%);
+  color: white;
+}
+
+.pass {
+  background-color: rgb(167, 220, 167);
+  color: black;
+  border: #434443;
+  cursor: pointer;
+}
+.fail {
+  background-color: rgb(206, 149, 25);
+  color: black;
+  border: #434443;
+  cursor: pointer;
+}
+.resolved {
+  background-color: rgb(240, 225, 25);
+  color: black;
+  border: #434443;
+  cursor: pointer;
+}
+
+element.style {
+  position: relative;
+}
+
+// app color override
+.c-sidebar-nav.ps {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+}
+.ps {
+  overflow: hidden !important;
+  overflow-anchor: none;
+  -ms-overflow-style: none;
+  touch-action: auto;
+  -ms-touch-action: auto;
+}
+.h-100 {
+  height: 100% !important;
+}
+.c-sidebar-nav {
+  position: relative;
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  padding: 0;
+  margin-bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  list-style: none;
+}
+// .c-sidebar:hover{
+//   color: #cc5151;
+// }
+.ps {
+  overflow: hidden !important;
+  touch-action: auto;
+  -ms-overflow-style: none;
+  overflow-anchor: none;
+}
+ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+user agent stylesheet ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 40px;
+}
+.c-sidebar {
+  color: #fff;
+  //@at-root: #661b1b;
+  background: #535050;
+}
+
+a {
+  text-decoration: none;
+  background-color: transparent;
+  color: #cc5151;
+}
+
+.c-sidebar .c-sidebar-nav-link.c-active {
+  color: #fff;
+  //background: #737a75;
+  background: #661b1b;
+  border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    margin-left: 5px;
+    /* margin-right: 5px; */
+    margin-top: 4px;
+}
+
+.c-sidebar .c-sidebar-nav-link:hover {
+  color: #fff;
+  //background: #434443;
+  border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    margin-left: 5px;
+    /* margin-right: 5px; */
+    margin-top: 4px;
+  background: #7e3d3d !important;
+}
+
+//
+.c-header {
+  /* background: #932525; */
+  /* border-bottom: 1px solid #d8dbe0; */
+  background: linear-gradient(to right, #ffffff 0%, #fafafa 50%);
+}
+
+// table color
+// #337ab7 color of table
+
+// .c-sidebar-brand{
+//   background-image: url(../assets/icons/esqlogo.jpg);
+
+// }
+
+.c-sidebar .c-sidebar-brand {
+  color: #fff;
+  background: url(../assets/icons/esqlogoN.jpg);
+  width: auto;
+  height: auto;
+  // image-resolution:;
+}
+
+.trucksummary_cust {
+  background-color: rgb(238, 232, 164);
+  color: black;
+}
+
+.headerEQModal {
+  // background: linear-gradient(to right, #990000 0%, #ffffff 100%);
+  background: linear-gradient(to right, #990000 0%, #ffffff 100%);
+  color: white;
+  height: auto;
+  font-size: small;
+}
+
+.checklistserch {
+  margin-top: 45px;
+}
+//map
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.option > span {
+  display: inline-block;
+  width: 90px;
+}
+
+.option > .dx-selectbox {
+  width: 100%;
+  max-width: 350px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.drivername {
+  border: black;
+}
+
+//job turck ENquiry css
+
+.fontsmall {
+  font-size: 12px;
+  font-style: bold;
+}
+
+// job truck end
+
+//timesheet
+
+.MuiDialog-paperWidthMd {
+  max-width: 500px;
+}
+
+.trucksummary_cust {
+  font-size: 10px;
+  background-color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trucksummary_cust:hover {
+  overflow: visible;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.trucksummary_customer {
+  background-color: rgb(241, 229, 159);
+ // border-color: black !important;
+}
+.trucklist_bg {
+  background-color: rgb(184, 94, 34);
+}
+//ONFIELDTURCK START(STATUS COLUMN)
+.Travelling {
+  background-color: rgb(208, 162, 245);
+ // border-color: black !important;
+}
+.Loading{
+  background-color: rgb(233, 221, 92);
+ // border-color: black !important;
+}
+.Accepted{
+  background-color: rgb(242, 144, 57);
+  //border-color: black !important;
+}
+.Arrived{
+  background-color: rgb(177, 240, 145);
+ // border-color: black !important;
+}
+.Arrived_at_Quary{
+  background-color: rgb(181, 156, 241);
+  //border-color: black !important;
+}
+
+//ONFIELDTURCK END
+.D{
+  background-color: #98ee7e;
+}
+.green{
+  background-color: #98ee7e;
+}
+//trucklist order list colors start
+.green-cell {
+  background-color: #98ee7e;
+}
+.orange-cell{
+  background-color: rgb(223, 190, 40);
+}
+.background-cell{
+  background-color: rgb(250, 250, 250);
+}
+.red-cell{
+  background-color: #ce949f;
+}
+.yellow-cell{
+  background-color: rgb(241, 229, 159);
+}
+//trucklist order list colors end
+.Occupied{
+  background-color: rgb(241, 229, 159);
+  //border-color: black !important;
+}
+.Available{
+  background-color: rgb(154, 247, 154);
+  color: black;
+  //border-color: black !important;
+}
+.box1 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: #f5f4f2;
+  border: 1px solid #000;
+  padding: 10px;
+
+
+}
+.box2 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: #ce949f;
+  border: 1px solid #000;
+  padding: 10px;
+}
+.box3 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: #f1d84b;
+  border: 1px solid #000;
+  padding: 10px;
+}
+.box4 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: #98ee7e;
+  border: 1px solid #000;
+  padding: 10px;
+}
+.boxtext{
+  font-style: bold;
+  font-weight: 600;
+  margin-bottom: 10px;
+  
+
+}
+.boxtext2{
+  font-style: bold;
+  font-weight: 640;
+  font-size: 12px;
+}
+.trucklistcolorRed{
+  background-color: #e392a1;
+  //border-color: black !important;
+  font-style: bold;
+  font-weight: 550;
+}
+.trucklistcolorGreen{
+  background-color: #98ee7e;
+  //border-color: black !important;
+  font-style: bold;
+  font-weight: 550;
+
+}
+.checklistQuestions{
+  background-color: rgb(241, 229, 159);
+}
+.peertableOnfield{
+  -webkit-user-select: none; /* Safari */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* Internet Explorer/Edge */
+user-select: none;
+user-select: none;
+cursor: pointer;
+
+}
+.peertableOnfieldalign{
+  -webkit-user-select: none; /* Safari */
+-moz-user-select: none; /* Firefox */
+-ms-user-select: none; /* Internet Explorer/Edge */
+user-select: none;
+user-select: none;
+cursor: pointer;
+text-align: "right";
+align-items: end;
+align-content: right;
+text-justify: right;
+}
+.my-row-class:hover {
+  background-color: rgb(64, 124, 235); /* Change this to the color you want */
+}
+
+// .peerTableContainer {
+//   height: 500px; /* change to your preferred height */
+//   overflow: auto;
+// }
+
+// .peerTableHeader {
+//   position: sticky;
+//   top: 0;
+//   background-color: white;
+//   z-index: 1;
+// }
+// .css-8je8zh-MuiTou , *, *::before, *::after {
+//   color: white;
+//   box-sizing: border-box;
+// }
+
+.MuiSvgIcon-root  {
+  overflow: hidden;
+  vertical-align: middle;
+
+
+}
+
+.c-sidebar-nav-dropdown-toggle .c-sidebar-nav-dropdown-items:hover{
+
+  background-color: #000 !important;
+  background: #000;
+}
+
+.todaystatcards{
+  width:150px;
+  font-weight: 600;
+  color: white;
+  font-size: larger;
+  height:50px
+  
+
+}
+
+
+
+.MuiDialog-paper{
+  border: 2px solid #000;
+}
+.MuiDialog-paperFullWidth {
+  width: calc(50% )!important ;
+
+}
+
+.MuiDialog-paperWidthMd {
+  max-width: 500px !important;
+}
+
+.MuiDialog-paperScrollPaper {
+  display: flex;
+  max-height: calc(100% ) !important;
+  flex-direction: column;
+}
+
+.MuiDialog-paper {
+  margin: 32px;
+  position: relative;
+  overflow-y: auto;
+}
+.peertableOnfieldATime{
+  font-size: 9px;
+}
+.Tsheet_Locked{
+  background-color: #e392a1;
+  color: #1a3e72;
+  font-weight: 600;
+}
+.Tsheet_Active{
+  background-color: rgba(157, 255, 118, 0.49);
+  color: #1a3e72;
+  font-weight: 600;
+}
+.Tsheet_Resolved{
+  background-color: rgba(224, 183, 60, 0.55);
+  color: #1a3e72;
+  font-weight: 600;
+}
+.MuiDataGrid-columnHeaders .css-f3jnds-MuiDataGrid-columnHeaders{
+  background-color: #1a3e72;
+}
+.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input {
+  padding-right: 24px;
+  min-width: 16px;
+  margin-top: -10px;
+}
+
+.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar {
+    min-height: 52px;
+    padding-right: 2px;
+    margin-top: 15px !important;
+}
+#myParentElement .MuiToolbar-root.MuiTablePagination-toolbar {
+  min-height: 52px;
+  padding-right: 2px;
+  margin-top: 15px !important;
+}
+
+.css-rmmij8 {
+ 
+  margin-bottom: 10px !important;
+}
+
+.css-whi0l6:last-child {
+  padding: 0px;
+  margin-top: 10px;
+}
+.MuiDataGrid-cell{
+  width:none
+}
+
+
+
+.animated-card-body {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: 60vh;
+  position: absolute;
+  width: 240px;
+  z-index: 999999;
+ 
+}
+
+
+// .animated-card-content {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+// }
+.animated-card-button {
+  background-color: rgb(161, 59, 34);
+  color: white;
+  padding: 7px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.animated-card-close {
+  cursor: pointer;
+  color: #888;
+  font-size: 16px;
+  position: absolute;
+  top: 5px;
+  right: 7px;
+}
+
+.animated-card-close:hover {
+  color: #1e1d1d;
+}
+
+.card-content {
+  margin-top: 20px;
+}
+.detailsHeading{
+  font-size: "15px";
+  font-weight: 400;
+  font-style: bold;
+}
+.detailsHeadingrow{
+  margin-top: -7px;
+  margin-bottom: 10px;
+}
+.animated-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-content-row {
+  display: flex;
+  align-items: center;
+}
+
+.card-content-label {
+  font-weight: bold;
+  width: 150px;
+}
+
+.card-content-value {
+  flex-grow: 1;
+}
+
+.card-content-value2{
+  font-size: "11px";
+  background-color: #cfcfcf;
+}
+
+@media (min-width: 768px) {
+  .col-md-3 {
+    flex: 0 0 22%;
+    max-width: 25%;
+  }
+}
+
+//live map individual css
+// .circle {
+//   width: 90px;
+//   height: 90px;
+//   border-radius: 50%;
+//   border: 2px solid black;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   text-align: center;
+//   margin-left:20% ;
+//   margin-top: 30px;
+//   margin-bottom: 5px;
+//   cursor: pointer;
+// }
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+ // background-color: #000;
+  align-items: center;
+  text-align: center;
+  margin-left: 20%;
+  margin-top: 15px;
+
+  cursor: pointer;
+  animation:  linear infinite, pulse2 2s ease-in-out infinite;
+}
+
+.circle:hover {
+  /* Add animation styles for the hover effect */
+  animation: pulse 0.5s;
+  cursor: pointer;
+}
+
+.textcircle {
+  color: black;
+  //color: white;
+  font-size: "18px";
+  font-weight: 500;
+  font-style: bold;
+  cursor: pointer;
+}
+.button {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.button.clicked {
+  outline: none;
+}
+
+
+.circle {
+  /* Add your existing styles for the circle here */
+}
+
+.clicked {
+  /* Add animation styles for when the button is clicked */
+  animation: pulse-clicked 0.5s;
+  cursor: pointer;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pulse-clicked {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+    border: 6px solid rgb(207, 47, 47);
+    color: rgb(223, 50, 50);
+  }
+}
+.tooltip {
+  position: absolute;
+  bottom: -20px; /* Adjust the tooltip position as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #ffffff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.circle:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+.ApproxTime{
+  color: black;
+color: rgb(93, 198, 247);
+
+// backgroundColor: "rgb(180, 219, 235)",
+// backgroundColor: "#eebe87",
+  //color: white;
+  font-size: 16px;
+  font-weight: 500;
+  font-style: bold;
+  align-items: center;
+}
+.timeview{
+margin-bottom: 15%;
+}
+.card-content-value3{
+  font-size: 16px;
+  font-style: bold;
+  font-weight: 500;
+  text-align: center;
+  align-items: center;
+}
+.refreshIcon:hover{
+  animation: pulse 0.5s;
+  cursor: pointer;
+}
+//ne 
+
+// @keyframes rotate {
+//   0% {
+//     transform: rotate(0deg);
+//   }
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }
+
+@keyframes pulse2 {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 218, 60, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+
+// Route Truck Histoy starts
+.RouteTruckInputs {
+  width: 150px;
+  font-size: 16px;
+  height: 35px;
+  border-radius: 4px;
+  border: #474545 solid 1px;/* Lighter shade of gray */
+  padding: 5px;
+  text-align: center;
+  border-style: solid ;
+}
+.RouteTruckButton{
+  font-size: 14px;
+  height: 35px;
+  border-radius: 4px;
+  width: 80px;
+  text-align: center;
+  background-color: #000;
+  color: white;
+  //animation: pop 0.3s ease-out;
+}
+.RouteTruckButton:hover{
+  animation: pop 0.3s ease-out;
+}
+
+
+@keyframes pop {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pop2 {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.RouteTruckCount{
+  text-align: center;
+  color: rgb(12, 12, 12);
+   border-radius: 4px;
+  //border: #000 solid 1px;
+  border: none;
+  background-color: #cdcbcb;
+  width: auto;
+  font-size: 14px;
+  height: 35px;
+  padding: 5px;
+  font-weight: 400;
+  margin-left: -38px;
+  
+  
+}
+.RouteTruckCount:hover{
+  animation: pop 0.3s ease-out;
+}
+.RouteTruckpopupDetails{
+  display: flex;
+  margin-bottom: -15px;
+}
+.RouteDetails{
+margin-right: 10px;
+font-weight: 500;
+font-size: 12px;
+padding: 3px;
+background-color: #fcfbfb;
+border: #b2b5b8 solid 2px;
+border-radius: 4px;
+
+}
+// Route Truck Histoy ends 
+
+
+// quotation screen starts scss-- Nadeesh Perera 28th June 2023
+.Quotation_row{
+  height: 57%;
+}
+
+.menu-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.menu-button {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  background-color: #fdfeff;
+  margin-right: 5px;
+  //margin-bottom: 5px;
+  padding: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  border-radius:5px;
+  box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%), 0 8px 12px 6px rgb(60 64 67 / 15%);
+}
+.menu-button:hover{
+  animation: pop 0.3s ease-out;
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+  
+}
+.menu-button:active{
+  border: 1px solid #ccc;
+  background-color: #b6babd;
+  color: rgb(12, 12, 12);
+}
+.menu-button:focus{
+
+  outline: none;
+}
+
+
+.menu-icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+.divider {
+  border-top: 1px solid #e97777;
+  margin: 5px 0; 
+}
+.dividercards{
+  //color: white;
+  padding: 10px;
+//background-image: url(../assets/icons/bgtest.jpg);
+//background-size: cover; /* Adjust to your preference */
+  border-radius: 5px;
+  box-shadow: 0px 0 1px 1px rgba(5, 42, 114, 0.15), 0 6px 12px 0 rgba(5, 41, 112, 0.15);
+  margin-bottom: 5px;
+}
+
+.select-field {
+  width: 80%;
+  margin-left: 10px;
+}
+.select-field_status{
+  width: 100%;
+  margin-left: 2%;
+}
+.inputdiv {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.inputdiv50 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  width: 50%;
+}
+
+.sub-row-4 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.sub-row-7 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.inputfields {
+  flex: 1;
+  margin-left: 5px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .sub-row-4,
+  .sub-row-7 {
+    grid-template-columns: 1fr;
+  }
+}
+.small-input-text {
+  font-size: 12px;
+  align-self: center;
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 0%;
+  padding: 1%;
+  color: #000;
+  border-color: #16689f;
+ // border-color: #9f4616;
+  max-height: 28.5px;
+  min-height: 28.3px;
+}
+.inputQuote{
+  width: 100%;
+}
+.align-top {
+  align-self: flex-start;
+  width: 100%;
+}
+.small-tabs .nav-link {
+  font-size: 12px;
+  padding: 0.25rem 0.5rem;
+}
+
+.small-tab-item {
+  margin-bottom: 0;
+}
+
+.small-tab-link {
+  padding: 0.25rem 0.5rem;
+}
+.rightalign{
+  align-items: right;
+}
+.RouteDetails{
+  display: flex;
+}
+.Customer{
+  display: flex;
+}
+.routehistorytext{
+  margin-left: 30px;
+  // font-weight: 700;
+}
+.routehistoryNumber{
+  font-weight: 700;
+}
+
+// quotation screenpopup
+
+.popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(8, 8, 8, 0.8);
+  z-index: 9999;
+  opacity: 1;
+ // visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+}
+
+.popup-container.open {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.popup-container .popup-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+}
+// use this for glass looking card view
+.routehistoryGlass{
+ // background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(119, 134, 151, 0.384);
+  backdrop-filter: blur(0.8px);
+  border-radius: 8px;
+  box-shadow: 0 6px 8px rgba(16, 16, 16, 0.15);
+  padding: 5px;
+  //margin: 5px;
+  transition: transform 0.3s ease-in-out;
+
+}
+.headerEQModalglasslookup {
+  // background: linear-gradient(to right, #990000 0%, #ffffff 100%);
+  background: linear-gradient(to right, #990000 0%, #ffffff 100%);
+  color: white;
+  padding: 10px;
+  margin: 10px 20px 0px 20px;
+  height: auto;
+  font-size: small;
+}
+.topictextpopup{
+  color: white;
+  z-index: 9999;
+  font-weight: 600;
+}
+// .ReportBtn {
+//   border-radius: 10px;
+//   border-width: 3px;
+//   border-image: linear-gradient(to right, #da0d0d, #ddbfbe) 1;
+//   border-image-slice: 1;
+// }
+// .ReportBtn:hover{
+//   animation: pop 0.3s ease-out;
+// }
+
+/* CSS */
+
+.button-28 { // report button in Route truck enquiry
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1A1A1A;
+  
+  border-radius: 10px;
+  box-sizing: border-box;
+  color: #3B3B3B;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 35px;
+  min-width: 0;
+  outline: none;
+  padding: 8px 18px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 80%;
+  will-change: transform;
+ 
+}
+
+.button-28:disabled {
+  pointer-events: none;
+}
+
+.button-28:hover {
+  color: #fff;
+  background-color: #1A1A1A;
+//  background: linear-gradient(90deg, #b21e07, transparent) #b98073;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+ // border: 2px solid #6c1104;
+ 
+}
+
+.button-28:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+// css for the route history popup component
+.grey-header th {
+  background-color: grey;
+  color: white;
+  border-right: 1px solid #ccc;
+}
+
+.quotation-grey-header th {
+  background-color: rgb(149, 145, 145);
+  color: white;
+  border-right: 1px solid #ccc;
+  font-size: 11px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.row2hover-effect{
+
+  background-color: rgb(155, 195, 214);
+  font-weight: 500;
+  color: rgb(48, 48, 48);
+  cursor: pointer;
+}
+.row2hover-effect:hover {
+ // background-color: rgb(255, 252, 252);
+  background-color: rgb(190, 190, 190);
+  
+  //cursor: pointer;
+}
+
+
+.row1hover-effect{
+  background-color:rgb(121, 191, 235);
+  cursor: pointer;
+  font-weight: 600;
+  //cursor: pointer;
+}
+.row1hover-effect:hover {
+  background-color: rgb(102, 176, 236);
+  //cursor: pointer;
+}
+// #cdcbcb;
+.RouteTruckDocket{
+  text-align: center;
+  color: rgb(12, 12, 12);
+   border-radius: 4px;
+  //border:  2px solid #648b70;
+  //border: none;
+  background-color: #d0e6cb;
+  font-weight: 600;
+  width: auto;
+  font-size: 12px;
+  height: 25px;
+  padding: 5px;
+ 
+  margin-left: -38px; 
+}
+.RouteTruckDocket:hover{
+  animation: pop 0.3s ease-out;
+}
+.inputdivbutton{
+  display: inline-block;
+  outline: 0;
+  width: 75px;
+  appearance: none;
+  padding: 0px 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-left: -10px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: rgb(249, 251, 250);
+  border: 1px solid rgb(137, 151, 155);
+  box-shadow: rgb(6 22 33 / 30%) 0px 1px 2px;
+  color: rgb(61, 79, 88);
+  font-size: 12px;
+  font-weight: 400;
+  height: 26px;
+  transition: all 150ms ease-in-out 0s;
+  
+
+}
+.inputdivbutton:hover {
+  color: rgb(61, 79, 88);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(93, 108, 116);
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+}
+.inputdivbutton:focus{
+outline: none;
+}
+.inputdivbutton:active {
+ 
+  transform: translateY(-2px); /* Move the button up by 2px */
+  box-shadow: 0 0 10px 4px rgba(44, 43, 43, 0.3); /* Red box shadow on click */
+  transition: transform 0.1s ease-in-out; 
+}
+
+// radio group
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  font-family: Arial, sans-serif;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px;
+  //margin-left: 10px;
+  margin-bottom: 10px;
+
+
+
+}
+
+.radiolabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 50px;
+  font-size: .8rem;
+  color: black;
+  font-weight: 500;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color 0.15s ease-in;
+}
+
+// .radioinput[type="radio"] {
+//   display: none;
+// }
+
+.radioinput[type="radio"]:checked + label {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  margin-right: 4px;
+}
+.collapse-button{
+  border: none;
+  background-color: none;
+  margin-top: -60px;
+  margin-bottom: 10px;
+  background-image: none;
+  border-radius: 5px;
+  //background: transparent;
+
+}
+.collapse-button:hover{
+  border: none;
+  background-color: none;
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+  animation: pop 0.3s ease-out;
+  border-radius: 5px;
+  
+}
+.collapse-button:active{
+  border: none;
+  background-color: none;
+  
+}
+.collapse-button:focus {
+  
+  outline: none;
+}
+
+.divider1 {
+  border: none;
+ // border-top: 1px solid #ccc;
+  border-top: 1px solid #e97777;
+  margin-bottom: 1px;
+  
+
+}
+// quotation popup print screen 
+.printIcon-button{
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  padding: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  border-radius: 3px;
+}
+.printIcon-button:hover{
+  animation: pop 0.3s ease-out;
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+}
+.printIcon-button:focus{
+
+  outline: none;
+}
+.printIcon-icon{
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+}
+
+
+//new radio nbtn
+.tabs {
+  display: flex;
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+  padding: 0.2rem;
+  border-radius: 10px;
+  margin-left: 20px;
+
+  
+}
+
+.tabs * {
+  z-index: 2;
+}
+
+.container input[type="radio"] {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  width: 50px;
+  font-size: .8rem;
+  color: black;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.10s ease-in;
+  margin-left: 20px;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: .8rem;
+  height: .8rem;
+  position: absolute;
+  top: 10px;
+  left: 30%;
+  font-size: 10px;
+  margin-left: 60px;
+  border-radius: 50%;
+ // margin: 0px;
+  background-color: #e6eef9;
+  transition: 0.10s ease-in;
+}
+
+.container input[type="radio"]:checked + label {
+  color: #185ee0;
+}
+
+.container input[type="radio"]:checked + label > .notification {
+  background-color: #185ee0;
+  color: #fff;
+  margin: 0px;
+}
+
+.container input[id="radio-1"]:checked ~ .glider {
+  transform: translateX(-190%);
+}
+
+.container input[id="radio-2"]:checked ~ .glider {
+  transform: translateX(-100%);
+}
+
+.container input[id="radio-3"]:checked ~ .glider {
+  transform: translateX(20%);
+}
+.container input[id="radio-4"]:checked ~ .glider {
+  transform: translateX(120%);
+}
+.container input[id="radio-5"]:checked ~ .glider {
+  transform: translateX(220%);
+}
+
+.glider {
+  position: absolute;
+  display: flex;
+  height: 30px;
+  width: 75px;
+  background-color: #e6eef9;
+  z-index: 1;
+  border-radius: 10px;
+  transition: 0.05s ease-out;
+  margin-bottom: 5px;
+  
+}
+
+@media (max-width: 700px) {
+ 
+  .tabs {
+    transform: scale(0.6);
+  }
+}
+.lookupIconQuotation{
+  cursor: pointer;
+  transition: color 0.10s ease-in;
+  border-radius: 2px;
+}
+.lookupIconQuotation:hover{
+  animation: pop 0.3s ease-out;
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+  border-radius: 3px;
+}
+.inputdivbutton2{
+  display: inline-block;
+  outline: 0;
+  width: auto;
+  appearance: none;
+  padding: 0px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: rgb(249, 251, 250);
+  border: 1px solid rgb(137, 151, 155);
+  box-shadow: rgb(6 22 33 / 30%) 0px 1px 2px;
+  color: rgb(61, 79, 88);
+  font-size: 12px;
+  font-weight: 400;
+  height: 26px;
+  transition: all 150ms ease-in-out 0s;
+  margin-left: 60%;
+  margin-top: 10px;
+  
+
+}
+.inputdivbutton2:hover {
+  color: rgb(61, 79, 88);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(93, 108, 116);
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+}
+.inputdivbutton2:focus{
+  outline: none;
+}
+.ContractorBtns{
+  display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+}
+.inputdivbutton3{
+  width: auto;
+  margin-left: 10px;
+  padding: 0px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: rgb(249, 251, 250);
+  border: 1px solid rgb(137, 151, 155);
+  box-shadow: rgb(6 22 33 / 30%) 0px 1px 2px;
+  color: rgb(61, 79, 88);
+  font-size: 12px;
+  font-weight: 400;
+  height: 26px;
+  transition: all 150ms ease-in-out 0s;
+  margin-top: 10px;
+}
+.inputdivbutton3:hover{
+  color: rgb(61, 79, 88);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(93, 108, 116);
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+}
+.inputdivbutton3:focus{
+  outline: none;
+}
+
+//end new btn
+// quotation screen ends 
+
+.form-check-label{
+  color: #000;
+}
+.red-row {
+  background-color: rgb(228, 130, 130);
+  color: rgb(7, 7, 7);
+}
+
+.yellow-row {
+  background-color: rgb(239, 239, 166);
+  color: black;
+}
+
+/* Default styles for the QuotationNoTable class */
+.QuotationNoTable {
+  overflow-y: auto; /* Default overflowY */
+  //height: 450px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+}
+
+/* Media query for laptop screen */
+@media (min-width: 1024px) {
+  .QuotationNoTable {
+    //height: 520px; /* Adjusted height for laptop resolution */
+  }
+}
+
+/* Media query for 24-inch monitor */
+@media (min-width: 1920px) {
+  .QuotationNoTable {
+    overflow-Y: auto; /* Adjusted overflowY for 24-inch monitor */
+   // height: 690px; /* Adjusted height for 24-inch monitor */
+    max-block-size: 100%; /* Adjusted maxWidth for 24-inch monitor */
+  }
+}
+.tableQuotationNo{
+ // height: 690px;
+}
+
+.tableQuotationNo thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid;
+  border-bottom-color: #747677;
+  text-align: center;
+}
+
+.tableQuotationNo-grey-header th {
+  background-color: rgb(117, 117, 117);
+  color: white;
+  border-right: 1px solid #8c8a8a;
+  font-size: 11px;
+  height: 18px;
+  text-align: center;
+  font-weight: 200;
+  padding: 0.2px;
+  font-family:   "Trebuchet MS", sans-serif;
+}
+.tableQuotationNo th{
+  /* padding: 0.75rem; */
+  text-align: inherit;
+  vertical-align: top;
+  border-top: 1px solid;
+  border-top-color:rgb(89, 89, 89);
+}
+.tableQuotationNo td{
+  //text-align: inherit;
+  font-size: 10px;
+  padding-left: 10px;
+  vertical-align: top;
+  border-top: 1px solid;
+  border-top-color:rgb(89, 89, 89);
+ //text-align: inherit;
+}
+.crow2hover-effect{
+
+  background-color: rgb(183, 230, 252);
+  // color: #000;
+  font-weight: 500;
+  //cursor: pointer;
+}
+.crow2hover-effect:hover {
+ // background-color: rgb(255, 252, 252);
+  background-color: rgb(190, 190, 190);
+  
+  //cursor: pointer;
+}
+.grey-row{
+  background-color: rgb(152, 201, 223);
+  color: black;
+}
+.selected-row{
+  background-color: rgb(177, 181, 183);
+  color: black;
+}
+
+.box1quote {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: rgb(228, 130, 130);
+  border: 1px solid #000;
+  padding: 10px;
+}
+.box2quote {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: #ede097;
+  border: 1px solid #000;
+  padding: 10px;
+}
+
+.inputdivbutton.delete-quote {
+  border: 1px solid #862f11;
+  animation: borderGlow 1s infinite alternate;
+  background-color: #862f11;
+  color: white;
+}
+.inputdivbutton.delete-quote:active {
+  transform: translateY(-2px); /* Move the button up by 2px */
+  box-shadow: 0 0 10px 4px rgba(44, 43, 43, 0.3); /* Red box shadow on click */
+  transition: transform 0.1s ease-in-out; 
+}
+
+.inputdivbutton.delete-quote:hover {
+  color: rgb(61, 79, 88);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(93, 108, 116);
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+}
+
+@keyframes rotateBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes borderAnimation {
+  0% {
+    border-width: 2px;
+  }
+  50% {
+    border-width: 4px; /* Increase border width to create the animation effect */
+  }
+  100% {
+    border-width: 2px;
+  }
+}
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 3px 0px transparent;
+  }
+  100% {
+    box-shadow: 0 0 3px 1px rgb(208, 21, 21);
+  }
+}
+
+// customer product Table css starts
+.Qt-ProductTable {
+  overflow-y: auto; /* Default overflowY */
+  height:  400px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+}
+
+/* Media query for laptop screen */
+@media (min-width: 1024px) {
+  .Qt-ProductTable {
+    height:  400px; /* Adjusted height for laptop resolution */
+  }
+}
+
+/* Media query for 24-inch monitor */
+@media (min-width: 1920px) {
+  .Qt-ProductTable {
+    overflow-Y: auto; /* Adjusted overflowY for 24-inch monitor */
+    height:  420px; /* Adjusted height for 24-inch monitor */
+    max-block-size: 100%; /* Adjusted maxWidth for 24-inch monitor */
+  }
+}
+
+
+.tableQt-ProductTable thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid;
+  border-bottom-color: #747677;
+  text-align: center;
+}
+
+.tableQt-ProductTable-grey-header th {
+  background-color: rgb(117, 117, 117);
+  color: white;
+  border-right: 1px solid #ccc6c6;
+  font-size: 12px;
+  height: 18px;
+  //width: 100%;
+  text-align: center;
+  font-weight: 200;
+  padding: 1px;
+  font-family:   "Trebuchet MS", sans-serif;
+}
+.tableQt-ProductTable td{
+  //text-align: inherit;
+  font-size: 10px;
+  padding-left: 10px;
+  vertical-align: top;
+  border-top: 1px solid;
+  //border-top-color:rgb(89, 89, 89);
+  border-top-color:rgb(251, 247, 247); //2024 dec - 5
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowed text */
+  text-overflow: ellipsis; /* Add ellipsis for truncated text */
+ //text-align: inherit;
+}
+
+
+// for selected table 
+
+.Qt-SelectedTable {
+  overflow-y: auto; /* Default overflowY */
+  height:  400px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+}
+
+/* Media query for laptop screen */
+@media (min-width: 1024px) {
+  .Qt-SelectedProductTable {
+    height:  300px; /* Adjusted height for laptop resolution */
+  }
+  .JObPlaningTables {
+    height:  700px; /* Adjusted height for laptop resolution */
+    width: 2000px;
+  }
+}
+
+
+/* Media query for 24-inch monitor */
+@media (min-width: 1920px) {
+  .Qt-SelectedProductTable {
+    overflow-Y: auto; /* Adjusted overflowY for 24-inch monitor */
+    height:  310px; /* Adjusted height for 24-inch monitor */
+    max-block-size: 100%; /* Adjusted maxWidth for 24-inch monitor */
+  }
+  .JObPlaningTables {
+    overflow-Y: auto; /* Adjusted overflowY for 24-inch monitor */
+    height:  720px; /* Adjusted height for 24-inch monitor */
+    max-block-size: 100%; /* Adjusted maxWidth for 24-inch monitor */
+    width: 2000px;
+  }
+
+  
+}
+.tableQt-SelectedTable thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid;
+  border-bottom-color: #747677;
+  text-align: center;
+}
+
+.tableQt-SelectedTable-grey-header th {
+  background-color: rgb(117, 117, 117);
+  color: white;
+  border-right: 1px solid #ccc6c6;
+  font-size: 12px;
+  height: 18px;
+  //width: 100%;
+  text-align: center;
+  font-weight: 200;
+  padding: 1px;
+  font-family:   "Trebuchet MS", sans-serif;
+}
+.tableQt-SelectedTable td{
+  //text-align: inherit;
+  font-size: 10px;
+  padding-left: 10px;
+  vertical-align: top;
+  border-top: 1px solid;
+  border-top-color:rgb(89, 89, 89);
+ //text-align: inherit;
+}
+// overright default css 
+
+.input-group {
+  margin-top: -2px !important;
+}
+.quotationcard{
+  background-color: rgba(247, 247, 247, 0.923);
+  border-radius: 5px;
+  margin-top:-23px ;
+  padding:9px
+  
+
+}
+.radiolabel{
+margin-left: 40px;
+font-family:   "Trebuchet MS", sans-serif;
+font-weight: 400;
+}
+.productradiobtn{
+  margin-left: 5px;
+  margin-right: 5px;
+  color: #000;
+}
+
+.no-outline input {
+  outline: none !important; /* Use !important to ensure it takes precedence */
+}
+.inputtextdark{
+  color: #242323;
+  font-family:   "Trebuchet MS", sans-serif;
+  font-weight: 600;
+}
+.box1ProductT {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: rgb(247, 206, 159);
+  border: 1px solid #000;
+  padding: 10px;
+}
+.box1ProductT2 {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: rgb(213, 115, 226);
+  border: 1px solid #000;
+  padding: 10px;
+}
+// customer product Table css ends 
+
+
+.Qt-SiteTable {
+  overflow-y: auto; /* Default overflowY */
+  //height:  550px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+
+}
+
+.JoborderbrowseTable{
+  overflow-y: auto;
+  height:  auto; 
+  max-Width: 100%; 
+}
+
+.Qt-CustCodeTable {
+  overflow-y: auto; /* Default overflowY */
+  height:  450px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+
+}
+
+.Qt-ContactTable {
+  overflow-y: auto; /* Default overflowY */
+  height:  300px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+  
+
+}
+/* Media query for laptop screen */
+@media (min-width: 1024px) {
+  .Qt-SiteTable {
+    //height:  550px; /* Adjusted height for laptop resolution */
+  }
+  .Qt-ContactTable {
+    overflow-y: auto; /* Default overflowY */
+    height:  450px; /* Default height for laptop resolution */
+    max-Width: 100%; /* Default maxWidth */
+    
+  
+  }
+  .Qt-CustCodeTable {
+    height:  550px; /* Adjusted height for laptop resolution */
+  }
+
+}
+
+/* Media query for 24-inch monitor */
+@media (min-width: 1920px) {
+  .Qt-SiteTable {
+    overflow-Y: auto; /* Adjusted overflowY for 24-inch monitor */
+    //height:  580px; /* Adjusted height for 24-inch monitor */
+    max-block-size: 100%; /* Adjusted maxWidth for 24-inch monitor */
+  }
+  .Qt-ContactTable {
+    overflow-y: auto; /* Default overflowY */
+    height:  300px; /* Default height for laptop resolution */
+    max-Width: 100%; /* Default maxWidth */
+    
+  
+  }
+  .Qt-CustCodeTable {
+    overflow-Y: auto; /* Adjusted overflowY for 24-inch monitor */
+    height:  480px; /* Adjusted height for 24-inch monitor */
+    max-block-size: 100%; /* Adjusted maxWidth for 24-inch monitor */
+  }
+}
+
+
+.tableQt-SiteTable thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid;
+  border-bottom-color: #747677;
+  text-align: center;
+}
+
+.tableQt-SiteTable-grey-header th {
+  background-color: rgb(117, 117, 117);
+  color: white;
+  border-right: 1px solid #ccc6c6;
+  font-size: 12px;
+  height: 18px;
+  //width: 100%;
+  text-align: center;
+  font-weight: 200;
+  padding: 1px;
+  font-family:   "Trebuchet MS", sans-serif;
+}
+.tableQt-SiteTable td{
+  //text-align: inherit;
+  font-size: 10px;
+  padding-left: 10px;
+  vertical-align: top;
+  border-top: 1px solid;
+  border-top-color:rgb(89, 89, 89);
+ // background-color: rgb(251, 249, 249);
+  color: #000;
+ //text-align: inherit;
+}
+
+
+.siteThover-effect{
+  background-color: rgb(237, 240, 241);
+  font-weight: 500;
+  cursor: pointer;
+}
+.siteThover-effect:hover {
+ // background-color: rgb(255, 252, 252);
+  background-color: rgb(190, 190, 190) !important;;
+  cursor: pointer;
+  //cursor: pointer;
+}
+.productThover-effect{
+
+  background-color: rgb(183, 230, 252);
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+.productThover-effect:hover {
+ // background-color: rgb(255, 252, 252);
+ background-color: rgb(190, 190, 190);
+ cursor: pointer;
+ color:black;
+ font-style: bold;
+ font-weight: 700;
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+ transform: scale(1.01); /* Scale up on hover */
+}
+.jobplaninghover-effect{
+
+  background-color: rgb(183, 230, 252);
+  font-weight: 500;
+  cursor: pointer;
+ // transition: transform 0.1s ease, box-shadow 0.3s ease;
+
+}
+.jobplaninghover-effect:hover {
+ // background-color: rgb(255, 252, 252);
+ background-color: rgb(190, 190, 190);
+ cursor: pointer;
+ color:black;
+ font-style: bold;
+ font-weight: 700;
+ box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+ //transform: scale(1.0); /* Scale up on hover */
+}
+
+.double-clicked-row {
+  background-color: #f0f0f0; /* Add your desired background effect */
+}
+
+/* Define a class for the icon (using Font Awesome as an example) */
+.rotating-disk {
+  //src: url('https://icons8.com/icon/Z4lBdSu2GAl2/loading-sign');
+ animation: rotate 2s linear infinite;
+ //animation: blink 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+  // 0% { opacity: 1; }
+  // 50% { opacity: 0; }
+  // 100% { opacity: 1; }
+}
+/* Define a CSS class for the popup animation */
+.popup-animation {
+  animation: popup 0.5s ease-in-out;
+  background-color: #f0f0f0;
+  font-style: "bold";
+}
+
+@keyframes popup {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.cellcolor_yellow{
+  background-color: rgb(242, 232, 169);
+  font-weight: 700;
+  color:black;
+  border: 1px solid rgb(76, 76, 76);
+  padding-right: 2px;
+
+  
+
+}
+.cellcolor_yellow:focus{
+  background-color: rgb(242, 232, 169);
+  font-weight: 700;
+  outline: none;
+  color:black;
+  border: 1.5px solid rgb(28, 100, 177);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(28, 100, 177, 0.7);
+  padding-right: 5px;
+  
+
+}
+.cellcolor_yellow:hover {
+  // background-color: rgb(255, 252, 252);
+   background-color: rgb(190, 190, 190);
+   cursor: pointer;
+   //color:white;
+   //cursor: pointer;
+ }
+ .cellcolor_transparent{
+  background-color: white;
+  font-weight: 600;
+  border-radius: 2px;
+  //color:black;
+  border: 1px solid rgb(76, 76, 76);
+  padding-right: 2px;
+}
+.cellcolor_transparent:hover {
+  // background-color: rgb(255, 252, 252);
+   background-color: rgb(190, 190, 190);
+   cursor: pointer;
+
+   //cursor: pointer;
+ }
+ .cellcolor_transparent:focus{
+  //background-color: rgb(242, 232, 169);
+  font-weight: 700;
+  outline: none;
+  color:black;
+  border: 1.5px solid rgb(28, 100, 177);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(28, 100, 177, 0.7);
+  padding-right: 5px;
+  
+  
+
+}
+
+
+
+ .deletebtn{
+  display: inline-block;
+  outline: 0;
+  appearance: none;
+  text-decoration: none;
+  cursor: pointer;
+  color: rgb(34, 30, 31);
+  transition: all 150ms ease-in-out 0s;
+}
+.deletebtn:hover {
+  color: rgb(173, 7, 32);
+}
+.deletebtn:focus{
+outline: none;
+}
+.deletebtn:active {
+ 
+  transform: translateY(-2px); /* Move the button up by 2px */
+  box-shadow: 0 0 10px 4px rgba(44, 43, 43, 0.3); /* Red box shadow on click */
+  transition: transform 0.1s ease-in-out; 
+}
+
+.userselectedrows{
+    background-color: rgb(116, 160, 182);
+   // color:white;
+     font-weight: 600;
+     color: black;
+     
+  //cursor: pointer;
+}
+
+
+.userselectedrows:hover{
+  background-color: rgb(42, 77, 95);
+  color:white;
+   font-weight: 500;
+ 
+} 
+
+
+.userselectedrows_job{
+  //   background-color: rgb(214, 229, 236);
+  //  // color:white;
+  //    font-weight: 600;
+  //    color: black;
+  background-color: rgb(42, 77, 95);
+  z-index: 2;
+  color:white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+
+.userselectedrows_job:hover{
+  background-color: rgb(42, 77, 95);
+  color:white;
+   font-weight: 500;
+ 
+
+}
+// .row2hover-effect{
+
+//   background-color: rgb(183, 230, 252);
+//   font-weight: 500;
+//   //cursor: pointer;
+// }
+// .row2hover-effect:hover {
+//  // background-color: rgb(255, 252, 252);
+//   background-color: rgb(190, 190, 190);
+  
+//   //cursor: pointer;
+// }
+
+// alert popup start
+/* Alert Popup Container */
+.alert-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+
+  /* Add transition for smooth appearance */
+  opacity: 0;
+  transition: opacity 0.3s;
+  animation: fadeIn 0.3s;
+}
+
+/* Alert Content */
+.alert-content {
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  text-align: center;
+  max-width: 400px;
+
+  /* Add transition for smooth appearance */
+  opacity: 0;
+  transition: opacity 0.3s;
+  animation: fadeIn 0.3s;
+}
+
+/* Close Button */
+.alert-content button {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+/* Add fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Add fade-out animation */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.sortIcon{
+  cursor: pointer;
+}
+.menu-button.disabled {
+  /* Styles for the disabled button */
+  opacity: 0.5; /* Example: reduce opacity for a visual indication */
+  cursor: not-allowed; /* Example: change cursor to not-allowed */
+}
+
+.menu-icon.disabled-icon {
+  /* Styles for the disabled icon */
+  filter: grayscale(100%); /* Example: grayscale the icon for a visual indication */
+}
+.mapPTable{
+  background-color: transparent;
+  border: none;
+  outline: 0;
+  appearance: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mapPTable:active{
+  background-color: transparent;
+  border: none;
+  outline: 0;
+  appearance: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mapPTable:focus{
+  background-color: transparent;
+  border: none;
+  outline: 0;
+  appearance: none;
+  text-decoration: none;
+  cursor: pointer;
+  animation: pop 0.3s ease-out;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 0px, rgb(231 238 236) 0px 0px 0px 0px;
+  
+}
+.mapPTable:hover{
+  background-color: transparent;
+  border: none;
+  outline: 0;
+  appearance: none;
+  text-decoration: none;
+  cursor: pointer;
+  animation: pop2 0.3s ease-out;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 0px, rgb(231 238 236) 0px 0px 0px 0px;
+  
+}
+// alert popup end
+
+// job order screen css start
+
+
+.Jb-ProductTable{
+  overflow-y: auto; /* Default overflowY */
+  height:  250px; /* Default height for laptop resolution */
+  max-Width: 100%; /* Default maxWidth */
+}
+.JB-SelectedProductTable{
+  overflow-y: auto; /* Default overflowY */
+  height:  300px; /* Default height for laptop resolution */
+  max-Width: 100%; 
+
+}
+
+/* Media query for laptop screen */
+@media (min-width: 1024px) {
+  .Jb-ProductTable {
+    height:  250px; /* Adjusted height for laptop resolution */
+  }
+  .JB-SelectedProductTable {
+    height:  200px; /* Adjusted height for laptop resolution */
+  }
+}
+
+.jobinputdivbutton{
+  display: inline-block;
+  outline: 0;
+  //width: 75px;
+  appearance: none;
+  padding: 0px 10px;
+  border-radius: 4px;
+  //margin-left: -10px;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: rgb(249, 251, 250);
+  border: 1px solid rgb(137, 151, 155);
+  box-shadow: rgb(6 22 33 / 30%) 0px 1px 2px;
+  color: rgb(61, 79, 88);
+  font-size: 12px;
+  font-weight: 400;
+  height: 26px;
+  transition: all 150ms ease-in-out 0s;
+  
+
+}
+.jobinputdivbutton:hover {
+  color: rgb(61, 79, 88);
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(93, 108, 116);
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+}
+.jobinputdivbutton:focus{
+outline: none;
+}
+.jobinputdivbutton:active {
+  background-color: rgb(255, 255, 255);
+  transform: translateY(-2px); /* Move the button up by 2px */
+  box-shadow: 0 0 10px 4px rgba(44, 43, 43, 0.3); /* Red box shadow on click */
+  transition: transform 0.1s ease-in-out; 
+}
+
+.alternativeroute{
+  cursor: pointer;
+display: block;
+outline: none;
+border: none;
+margin-bottom: "20px";
+background-color: transparent;
+
+}
+.alternativeroute:focus{
+outline: none;
+border: none;
+border-radius: "10px";
+color: rgb(51, 100, 124);
+font-weight: 500;
+background-color: rgb(255, 255, 255);
+box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+
+}
+.alternativeroute:hover{
+  color: rgb(61, 79, 88);
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgb(0 0 0 / 30%) 0px 4px 4px, rgb(231 238 236) 0px 0px 0px 3px;
+  outline: none;
+  border: none;
+
+}
+.paymentcard{
+  //background-image: url(../assets/icons/costwallpaper.jpg);
+  background: linear-gradient(to right, #fdfdfd, #6fa0b2); /* Replace these colors with your desired gradient */
+  background-color: rgba(255, 255, 255, 0.8);
+  
+}
+.alternativeroute:active{
+
+
+}
+.marginL-100{
+  margin-left: -100px;
+}
+.marginR5{
+  margin-right: 5px;
+}
+.marginR10{
+  margin-right: 10px;
+}
+.marginR20{
+  margin-right: 20px;
+}
+.marginR30{
+  margin-right: 30px;
+}
+.marginR40{
+  margin-right: 40px;
+}
+
+
+.marginL5{
+  margin-left: 5px;
+}
+.marginL10{
+  margin-left: 10px;
+}
+.marginL20{
+  margin-left: 20px;
+}
+.marginL30{
+  margin-left: 30px;
+}
+.marginL40{
+  margin-left: 40px;
+}
+
+.marginT5{
+  margin-top: 5px;
+}
+.marginT10{
+  margin-top: 10px;
+}
+.marginT20{
+  margin-top: 20px;
+}
+.marginT30{
+  margin-top: 30px;
+}
+.marginT40{
+  margin-top: 40px;
+}
+
+.marginB5{
+  margin-bottom: 5px;
+}
+.marginB10{
+  margin-bottom: 10px;
+}
+.marginB20{
+  margin-bottom: 20px;
+}
+.marginB30{
+  margin-bottom: 30px;
+}
+.marginB40{
+  margin-bottom: 40px;
+}
+
+
+.colorGreen{
+color: #207c49;
+}
+.colorRed{
+  color: #b63f07;
+}
+.colorOrrange{
+  color: #ddb684;
+}
+.colorBlue{
+  color: #346baa;
+  
+  colro:rgb(112, 159, 180)
+}
+
+.weight400{
+  font-weight: 400;
+}
+.weight500{
+  font-weight: 500;
+}
+.weight600{
+  font-weight: 600;
+}
+.width200{
+  width: 200px;
+}
+.widthp80{
+  width: 80%;
+}
+.width300{
+  width: 300px;
+}
+.width400{
+  width: 400px;
+}
+.width500{
+  width: 500px;
+}
+.width600{
+  width: 600px;
+}
+.width700{
+  width: 700px;
+}
+.togglebtnside {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background-color: #6fa0b2;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, width 0.3s ease; /* Add width transition */
+  z-index: 999;
+}
+.togglebtnside:hover {
+  width: 220px; /* Adjust the increased width */
+}
+.textalignR{
+  text-align: "right",
+}
+.ProductMborderCard{
+  border: 1px solid #b3afaf;
+  margin-bottom: 2%;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: nowrap  !important;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+  .custom-data-table-container {
+    overflow-x: auto;
+  }
+  
+  .custom-data-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .custom-data-header {
+  background-color: #666868; /* Dark gray background */
+  color: white;           /* White text color */
+  font-size: 10px;       /* Smaller font size */
+  text-align: right;      /* Align text to the right */
+  border: 1px solid #ddd; /* Add a border for better visibility */
+  padding: 1px;
+  border-radius: 3px;
+  }
+  
+  .custom-data-cell {
+   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 10px; 
+    color: #000;
+    font-weight: 500;       /* Smaller font size */
+    border-bottom: 1px solid #dedada; /* Add a border for better visibility */
+    border-right:1px solid #000;
+    padding: 1px;             /* Remove padding */
+    text-align: right;
+    min-width: 60px;
+   
+  }
+  .w-200{
+    width: 200px;
+  }
+  .w-150{
+    width: 150px;
+  }
+
+  .truncated-text {
+    white-space: nowrap;       /* Prevent line breaks */
+    overflow: hidden;          /* Hide the overflow text */
+    text-overflow: ellipsis;   /* Display ellipsis (...) */
+  }
+  .scrollable-cell {
+    white-space: nowrap;
+    overflow-x: auto;
+    width: 200px; /* Set a fixed width */
+  }
+  .wrap-text {
+    white-space: normal; /* Allow text to wrap */
+    word-wrap: break-word; /* Break long words */
+  }
+  .doubleclicked_rows{
+    //   background-color: rgb(214, 229, 236);
+    //  // color:white;
+    //    font-weight: 600;
+    //    color: black;
+    background-color: rgb(34, 35, 36);
+    z-index: 2;
+    color:white;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* Dropdown Animation */
+.dropdown-open {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.dropdown-closed {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+.c-main {
+  padding-right: 10px !important; 
+      padding-left: 10px !important;
+}
+@media (min-width: 768px) {
+  .c-main > .container-fluid, .c-main > .container-sm, .c-main > .container-md, .c-main > .container-lg, .c-main > .container-xl, .c-main > .container-xxl {
+      padding-right: 15px !important;
+      padding-left: 15px !important; 
+  }
+}
+.jobPlaningcard{
+  background-color: rgba(247, 247, 247, 0.923);
+  border-radius: 5px;
+  // margin-top:-23px ;
+  padding:1px
+  
+
+}

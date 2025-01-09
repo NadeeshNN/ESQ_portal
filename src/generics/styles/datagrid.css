@@ -1,0 +1,14 @@
+﻿#grid-container {
+    height: 440px;
+}
+
+.master-detail-caption {
+    padding: 0 0 5px 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dx-datagrid-headers {
+    background-color: #337AB7;
+    color: white;
+}
