@@ -1,349 +1,671 @@
-/**
- * Created By Nadeesh Perera
- * Discription : This component  is a Main component in Central control .
- *
- */
-
-import React, { Component } from "react";
-import { CCard, CCardBody, CCardHeader } from "@coreui/react";
-import LabelInput from "src/generics/fields/LabelInput";
-import PeerTable2 from "src/generics/table/PeerTable2";
+import React, { useState, useEffect } from "react";
 import { apiGetCall } from "src/generics/APIFunctions";
-import moment from "moment";
-import { API_URL } from "../util/config";
-import { Button } from "@mui/material";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import CheckListDetails from "./Tables_CC/CheckListDetails";
-import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import LinearProgress from "@material-ui/core/LinearProgress";
 
-const style = {
+//import TruckMap from "../map/TruckLocationMap";
+import PeerTable2 from "src/generics/table/PeerTable2";
+import TruckList from "./Tables_CC/TruckList";
+import Trucksummary from "./Tables_CC/Trucksummary";
+import { API_URL } from "../util/config";
+import JobtruckEnquryMap from "../map/JobtruckEnquryMap";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue } from "firebase/database";
+import { CButton, CCard, CCardBody, CCardHeader, CCardTitle, CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CTabs } from "@coreui/react";
+
+//import { cilWarning, cilCheckCircle, cilCargo, cilTruck, cilList } from '@coreui/icons'; 
+//import CIcon from "@coreui/icons-react";
+import { Card } from "@material-ui/core";
+import { cilSettings, cilUser, cilHome } from '@coreui/icons'; 
+//import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+//import { Home, DirectionsCar, CheckCircle, ListAlt } from '@mui/icons-material';  // Import icons
+
+import QueueIcon from '@mui/icons-material/Queue';
+import WorkIcon from '@mui/icons-material/Work';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+//import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+
+const styleBreakHistory = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "73%",
+  width: 1100,
+  height: "80",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 2,
-  borderRadius:"8px"
+  openmodal: false,
 };
 
-export default class CheckList extends Component {
-  state = {
-    CheckList: [],
-    startDate: moment().add(-15, "days").format("YYYY-MM-DD"),
-    endDate: moment()
-      .add(+1, "days")
-      .format("YYYY-MM-DD"),
-    columns: [],
-    DriverCode: "",
-    field: "",
-    open: false,
-    isLoading: true,
-    pageSize: 20,
-  };
+const firebaseConfig = {
+  apiKey: "API_KEY",
+  authDomain: "eqtruckapp-b99f2.firebaseio.com",
+  databaseURL: "https://eqtruckapp-b99f2-default-rtdb.firebaseio.com",
+  projectId: "eqtruckapp-b99f2",
+  storageBucket: "eqtruckapp-b99f2.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID",
+  measurementId: "G-MEASUREMENT_ID",
+};
 
-  handleClose = (Mapurl) => {
-    this.setState({ open: false });
-  };
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
-  handleOpen = (Mapurl) => {
-    this.setState({ open: true });
-  };
+const JobTruckEnq = () => {
+  const [activeKey, setActiveKey] = useState(1);
+  const [onfieldtruck, setOnfieldtruck] = useState([]);
+  const [stats, setStats] = useState([]);
+  const [Queued, setQueued] = useState(0);
+  const [OnFeild, setOnFeild] = useState(0);
+  const [Finished, setFinished] = useState(0);
+  const [TotLoad, setTotLoad] = useState(0);
+  const [docketNo, setDocketNo] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [truckLastLatitude, setTruckLastLatitude] = useState("");
+  const [truckLastLongitude, setTruckLastLongitude] = useState("");
+  const [destinationLongitude, setDestinationLongitude] = useState("");
+  const [destinationLatitude, setDestinationLatitude] = useState("");
+  const [distTime, setDistTime] = useState([]);
+  const [prevSumArriveStatus, setPrevSumArriveStatus] = useState([]);
+  const [polylinePath, setPolylinePath] = useState("");
+  const [openmodal, setOpenmodal] = useState(false);
+  const [StatusDesc, setStatusDesc] = useState("");
+  const [Truckcode, setTruckcode] = useState("");
+  const [customer, setCustomer] = useState("");
+  const [MarkerText, setMarkerText] = useState("");
 
-  onCellClick(e) {}
+  const [latitudeA, setLatitudeA] = useState(0); // Initialized to 0
+  const [longitudeA, setLongitudeA] = useState(0); // Initialized to 0
+  const [latitudeB, setLatitudeB] = useState(0); // Initialized to 0
+  const [longitudeB, setLongitudeB] = useState(0);
+  
 
-  async generateColumns() {
-    const column = [
-      {
-        field: "DriverCode",
-        headerName: "DriverCode",
-        sortable: true,
-        headerAlign: "center",
-        headerClassName: "super-app-theme--header",
-      },
-    ];
+  useEffect(() => {
+    fetchTruckData();
+    fecthDrivers();
 
-    let endDate = "";
-    for (let i = 1; i <= 15; i++) {
-      const dateToDisplay = moment(this.state.startDate).add(i, "days");
-      const dateColumnHeader = {
-        field: dateToDisplay.format("YYYY-MM-DD"),
-        type: "button",
-        headerName: dateToDisplay.format("YYYY-MM-DD"),
-        headerAlign: "center",
-        headerClassName: "super-app-theme--header",
-        width: 85,
-      };
+    const dbRef = ref(database, "location/trucks");
+    const firebaseListener = onValue(dbRef, (snapshot) => {
+      const data = snapshot.val();
+      let sumArriveStatus = 0;
 
-      column.push(dateColumnHeader);
-      endDate = dateToDisplay.format("YYYY-MM-DD");
-    }
-    await this.setState({
-      columns: column,
-      //endDate: endDate,
-    });
-  }
-
-  ReturnValue = (Value) => {
-    return <div style={{ color: "red" }}>${Value}</div>;
-  };
-
-  normalizeRow(array) {
-    this.generateColumns();
-    if (array) {
-      const newArray = [];
-
-      // generata listing dates
-
-      const dates = [];
-      for (let i = 0; i <= 15; i++) {
-        const dateToDisplay = moment(this.state.startDate).add(i, "days");
-        dates.push(dateToDisplay.format("YYYY-MM-DD"));
+      for (let key in data) {
+        const isComplete = data[key].iscomplete;
+        if (isComplete === "no") {
+          const arriveStatus = data[key].status;
+          sumArriveStatus += arriveStatus;
+        }
       }
 
-      //
-      for (let obj of array) {
-        const row = {
-          DriverCode: obj.DriverCode,
-          //Status: obj.CheckListStatus.Status,
-          // DriverName:obj.DriverName
-        };
-
-        //   generating driver date to array
-        let arrayOfCheckListStatus = [];
-        const SCheckListStatus = [];
-        const CheckListStatus = [];
-        for (let obj1 of obj.CheckListStatus) {
-          arrayOfCheckListStatus.push({
-            //  date: moment(obj1.CheckListDate).format("YYYY-MM-DD"),
-            date: obj1.CheckListDate.slice(0, 10),
-            status: obj1.Status,
-          });
-        }
-
-        for (let i = 0; i <= dates.length; i++) {
-          let ARROBJ = arrayOfCheckListStatus.find(
-            (item) => item.date === dates[i]
-          );
-
-          if (ARROBJ) {
-            const status =
-              ARROBJ.status === "P"
-                ? "PASS"
-                : ARROBJ.status === "F"
-                ? "FAILED"
-                : ARROBJ.status === "R"
-                ? "RESOLVED"
-                : "";
-            row[dates[i]] = status;
-          } else {
-            row[dates[i]] = "";
-          }
-        }
-
-        newArray.push(row);
+      if (sumArriveStatus !== prevSumArriveStatus) {
+        setPrevSumArriveStatus(sumArriveStatus);
+        fetchTruckData();
       }
-      this.setState({ CheckList: newArray });
-    }
-  }
-
-  componentDidMount = () => {
-    this.fecthData();
-  };
-
-  fecthData = () => {
-    this.setState({
-      isLoading: true,
     });
 
-    const url = `${API_URL}centralcontol/checklistenquiry?fromDate=${this.state.startDate}&toDate=${this.state.endDate}`;
-    this.setState({
-      CheckList: [],
-    });
-    //https://test.esqtruckapi.com.au/
+    return () => {
+      if (firebaseListener) firebaseListener(); // Detach Firebase listener
+    };
+  }, [prevSumArriveStatus]);
 
-    const callback = (da) => {
-      this.normalizeRow(da.ResultSet);
+  const fecthDrivers = () => {
+    const url = `${API_URL}centralcontol/truckTodayStat`;
 
-      this.setState({
-        isLoading: false,
-      });
+    const callback = (data) => {
+      setStats(data.ResultSet);
+      setQueued(data.ResultSet[0].Queued);
+      setOnFeild(data.ResultSet[0].OnFeild);
+      setFinished(data.ResultSet[0].Finished);
+      setTotLoad(data.ResultSet[0].TotLoad);
     };
 
-    const error = (e) => {
-      console.error(e);
-    };
+    const error = (e) => console.error(e);
 
     apiGetCall(url, callback, error);
   };
-  setPageSize = (newPageSize) => {
-    this.setState({
-      pageSize: newPageSize,
-    });
+
+  const fetchTruckData = () => {
+    const url = `${API_URL}centralcontol/onfieldtruck`;
+
+    const callback = (truck) => {
+      setOnfieldtruck(truck.ResultSet);
+    };
+
+    const error = (e) => console.error(e);
+
+    apiGetCall(url, callback, error);
   };
 
-  render() {
-    return (
-      <React.Fragment>
-        <CCard>
-          <CCardHeader className="headerEQ">Check List Enquiry</CCardHeader>
-          <CCardBody>
-            <div className="row">
-              <div className="col-lg-2">
-                <LabelInput
-                  type="date"
-                  name="startdate"
-                  label="Start Date"
-                  value={moment(this.state.startDate)
-                    .add(+1, "days")
-                    .format("YYYY-MM-DD")}
-                  onChange={(startDate) => {
-                    startDate = moment(startDate.target.value).format(
-                      "YYYY-MM-DD"
-                    );
-                    this.setState({ startDate: startDate }, () => {
-                      this.generateColumns();
-                    });
-                  }}
-                />
-              </div>
-              <div className="col-lg-2">
-                <LabelInput
-                  type="date"
-                  name="todate"
-                  label="End Date"
-                  disabled
-                  value={moment(this.state.endDate)
-                    .add(-1, "days")
-                    .format("YYYY-MM-DD")}
-                  onChange={(endDate) => {
-                    endDate = moment(endDate.target.value).format("YYYY-MM-DD");
-                    this.setState({ endDate: endDate }, () => {
-                      // this.fecthData();
-                    });
-                  }}
-                />
-              </div>
-              <div className="col-lg-2">
-                <Button
-                  style={{ marginTop: 45, backgroundColor: "black" }}
-                  variant="contained"
-                  title="excute"
-                  onClick={() => {
-                    this.fecthData();
-                  }}
-                >
-                  GO <PlayCircleFilledIcon style={{ marginLeft: 9 }} />
-                </Button>
-              </div>
-              <div className="col-lg-2">
-                <Button
-                  style={{ marginTop: 45, backgroundColor: "black" }}
-                  variant="contained"
-                  title="-14 days"
-                  onClick={(startDate) => {
-                    startDate = moment(this.state.startDate)
-                      .add(-13, "days")
-                      .format("YYYY-MM-DD");
-                    let endDate = moment(this.state.endDate)
-                      .add(-13, "days")
-                      .format("YYYY-MM-DD");
-                    this.setState(
-                      { startDate: startDate, endDate: endDate },
-                      () => {
-                        this.generateColumns();
-                        this.fecthData();
-                      }
-                    );
-                  }}
-                >
-                  <ArrowBackIcon style={{ marginLeft: 9 }} />
-                </Button>
-                <Button
-                  style={{
-                    marginTop: 45,
-                    marginLeft: 8,
-                    backgroundColor: "black",
-                  }}
-                  variant="contained"
-                  title="+14 days"
-                  onClick={(startDate) => {
-                    startDate = moment(this.state.startDate)
-                      .add(+13, "days")
-                      .format("YYYY-MM-DD");
-                    let endDate = moment(this.state.endDate)
-                      .add(+13, "days")
-                      .format("YYYY-MM-DD");
-                    this.setState(
-                      { startDate: startDate, endDate: endDate },
-                      async () => {
-                        await this.generateColumns();
-                        this.fecthData();
-                      }
-                    );
-                  }}
-                >
-                  <ArrowForwardIcon style={{ marginLeft: 9 }} />
-                </Button>
-              </div>
-              <div className="col-lg-2"></div>
-            </div>
-            <br />
-            <br />
-            {!this.state.isLoading ? (
-              <PeerTable2
-                name="CheckList"
-                data={this.state.CheckList == null ? [] : this.state.CheckList}
-                pageSize={this.state.pageSize}
-                onPageSizeChange={this.setPageSize}
-                rowsPerPageOptions={[10, 20, 50, 75, 100]}
-                rowHeight={32}
-                style={{ fontSize: "10px", width: "100%" }}
-                headerHeight={40}
-                columns={this.state.columns}
-                onCellDoubleClick={(e) => {
-                  const field = e.field;
-                  const DriverCode = e.row.DriverCode;
-                  this.setState({ field: field, DriverCode: DriverCode });
-                  this.handleOpen();
-                }}
-                getCellClassName={(params) => {
-                  if (params.value == "PASS") {
-                    return "pass";
-                  } else if (params.value == "FAILED") {
-                    return "fail";
-                  } else if (params.value == "RESOLVED") {
-                    return "resolved";
-                  }
-                }}
-              />
-            ) : (
-              <LinearProgress />
-              // <CircularProgress />
-            )}
+  const TruckLastLocation = async (CDocketNo) => {
+    const url = `${API_URL}centralcontol/trucklastlocation?docketNo=${CDocketNo}`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.ResultSet[0]) {
+        const firstLocation = data.ResultSet[0];
+        setLocations(data.ResultSet);
+        setTruckLastLatitude(firstLocation.truckLastLatitude);
+        setTruckLastLongitude(firstLocation.truckLastLongitude);
+      } else {
+        console.log("null array");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-            <Modal
-              className="modalsize"
-              open={this.state.open}
-              onClose={this.handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <CheckListDetails
-                  field={this.state.field}
-                  DriverCode={this.state.DriverCode}
-                />
-              </Box>
-            </Modal>
-          </CCardBody>
-        </CCard>
-      </React.Fragment>
-    );
-  }
-}
+  const GetApproxDistTime = async (
+    id,
+    destinationLongitude,
+    destinationLatitude
+  ) => {
+    const url = `${API_URL}centralcontol/getAproxDistTime?orgin=${truckLastLatitude},${truckLastLongitude}&distination=${destinationLatitude},${destinationLongitude}`;
+
+    const callback = (lc) => {
+      setDistTime(lc.ResultSet);
+      addApproxDist(id, lc.ResultSet);
+    };
+
+    const error = (e) => console.error(e);
+
+    await apiGetCall(url, callback, error);
+  };
+
+  const addApproxDist = (id, data) => {
+    const dataset = [...onfieldtruck];
+    const dataString = data[0];
+    const approxDist = dataString.split(",")[0];
+    const approxTime = dataString.split(",")[1];
+
+    dataset[id] = { ...dataset[id], ApproxDist: approxDist, ApproxTime: approxTime };
+    setOnfieldtruck(dataset);
+  };
+
+  const getpolyline = () => {
+    const url = `${API_URL}centralcontol/getplloyline?orgin=${truckLastLatitude},${truckLastLongitude}&distination=${destinationLatitude},${destinationLongitude}`;
+
+    const callback = (data) => {
+      setPolylinePath(data.ResultSet[0]);
+    };
+
+    const error = (e) => console.error(e);
+
+    apiGetCall(url, callback, error);
+  };
+
+  const handleOpenmodal = () => setOpenmodal(true);
+  const handleClosemodal = () => {
+    setOpenmodal(false);
+    setDocketNo("");
+    setTruckLastLatitude("");
+    setTruckLastLongitude("");
+    setDestinationLongitude("");
+  };
+ 
+  const formatValueDecimal = (e) => {
+    let value = Number(e);
+    return value.toFixed(2);
+  };
+   
+
+//  const  getpolyline = () => {
+//     const url = `${API_URL}centralcontol/getplloyline?orgin=${latitudeA},${longitudeA}&distination=${latitudeB},${longitudeB}`;
+//     const callback = (data) => {
+//       this.setState({
+//         polylinePath: data.ResultSet[0],
+//       });
+//     };
+//     const error = (e) => {
+//       console.error(e);
+//     };
+//     apiGetCall(url, callback, error);
+//   };
+
+const states = [
+  { color: "danger", label: "Queued", value: Queued, icon: <QueueIcon  fontSize="large" /> },  // Replace cilHome with Material UI icon
+  { color: "warning", label: "OnField", value: OnFeild, icon: <WorkIcon  fontSize="large" /> },  // Replace cilTruck
+  { color: "success", label: "Finished", value: Finished, icon: <CheckCircleIcon  fontSize="large" /> },  // Replace cilCheckCircle
+  { color: "info", label: "T Load", value: TotLoad, icon: <LocalShippingIcon  fontSize="large" /> }  // Replace cilList
+];
+
+     return (
+       <React.Fragment>
+         <CCard>
+           <CCardHeader className="headerEQ">Job Truck Enquiry</CCardHeader>
+           <br></br>
+           <CCardBody>
+             <div>
+               <CRow>
+                 <CCol>
+                   <CCard
+                     className="text-center"
+                     style={{ marginLeft: "17px", marginRight: "17px" }}
+                   >
+                     <CCardBody>
+                     <CRow>
+  <CCol sm="12" className="slideInLeft">
+    <CCardTitle style={{ marginTop: "10px", fontWeight: "700" }}>
+      TODAY&apos;S STATS
+    </CCardTitle>
+  </CCol>
+</CRow>
+
+<CRow>
+  {states.map((stat, index) => (
+    <CCol sm="6" lg="3" className="slideIn" key={index}>
+      <Card
+       // className="todaystatcards"
+      // className="border border-blue-gray-100 shadow-sm animate-slideInLeft"
+        style={{
+          backgroundColor: `var(--${stat.color})`,
+          padding: '20px',
+          height: '50%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}
+      >
+        <CCardBody
+  className="p-4 text-right"
+  style={{
+    display: 'flex',            // Set the layout to flex
+    justifyContent: 'space-between',  // Align items horizontally (left for icon, right for label/value)
+    alignItems: 'center',       // Align items vertically (center them in the middle)
+  }}
+>
+  <Box
+  sx={{
+   // backgroundColor: "lightblue", // Icon background color
+    borderRadius: "50%", // Circle shape
+    display: "flex", // Use flexbox to center content
+    alignItems: "center", // Vertically center the icon
+    justifyContent: "center", // Horizontally center the icon
+    width: "50px", // Circle container width
+    height: "50px", // Circle container height
+    marginRight: "60px", // Spacing between icon and text
+  }}
+  >
+  {/* Icon on the left */}
+  <div style={{ fontSize: '500px', color: 'white', display: "flex"   }}>
+    
+    {stat.icon}  {/* Render the Material UI icon */}
+  </div>
+  </Box>
+  {/* Label and value on the right */}
+  <div style={{ textAlign: 'right' }}>
+    <h5 style={{ color: '#fff', fontWeight: 'bold' }}>
+      {stat.label} <span>{stat.value}</span>
+    </h5>
+  </div>
+</CCardBody>
+      </Card>
+    </CCol>
+  ))}
+</CRow>
+                     </CCardBody>
+                   </CCard>
+ 
+                   {/* <MyComponent /> */}
+                   {/* <TruckMap
+                         latitude={-32.94465}
+                         longitude={141.7872}
+                         defaultZoom={10}
+                       /> */}
+                   <Modal
+                     className=""
+                     open={openmodal}
+                     onClose={handleClosemodal}
+                     aria-labelledby="modal-modal-title"
+                     aria-describedby="modal-modal-description"
+                   >
+                     <Box sx={styleBreakHistory}>
+                       <JobtruckEnquryMap
+                         destinationLongitude={destinationLongitude}
+                         destinationLatitude={destinationLatitude}
+                         truckLastLatitude={truckLastLatitude}
+                         truckLastLongitude={truckLastLongitude}
+                         StatusDesc={StatusDesc}
+                         Truckcode={Truckcode}
+                         customer={customer}
+                         MarkerText={MarkerText}
+                         polylinePath={polylinePath}
+                         style={{ marginTop: "10px" }}
+                       />
+                     </Box>
+                   </Modal>
+                   <CCol>
+                     <CCard className="text-center slideInLeft">
+                       <CCardBody>
+                         <CTabs activeTab="onfieldtruck">
+                           <CNav variant="tabs">
+                             <CNavItem>
+                               <CNavLink
+                                 data-tab="onfieldtruck"
+                                 active={activeKey === 1}
+                                 onClick={() => setActiveKey(1)}
+                               >
+                                 On Field Truck
+                               </CNavLink>
+                             </CNavItem>
+                             <CNavItem>
+                               <CNavLink
+                                 data-tab="trucksummary"
+                                 active={activeKey === 2}
+                                 onClick={() => setActiveKey(2)}
+                               >
+                                 Truck Summary
+                               </CNavLink>
+                             </CNavItem>
+                             <CNavItem>
+                               <CNavLink
+                                 data-tab="TruckList"
+                                 active={activeKey === 3}
+                                 onClick={() => setActiveKey(3)}
+                               >
+                                 Truck List
+                               </CNavLink>
+                             </CNavItem>
+                           </CNav>
+                           <CTabContent>
+                             <CTabPane
+                             className="slideInBottom"
+                               data-tab="onfieldtruck"
+                               visible={activeKey === 3}
+                             >
+                               <br></br>
+                               <div>
+                                 <br></br>
+                                 <div>
+                                   <PeerTable2
+                                     name="On field Truck"
+                                     style={{
+                                       fontSize: "12px",
+                                       width: "100%",
+                                     }}
+                                     data={
+                                       onfieldtruck == null
+                                         ? []
+                                         : onfieldtruck
+                                     }
+                                     pageSize={20}
+                                     rowHeight={30}
+                                     headerHeight={30}
+                                     className="peertableOnfield"
+                                     rowClassName="my-row-class"
+                                     onRowDoubleClick={async (e) => {
+                                       const Cust_site_longitude =
+                                         e.row.Cust_site_longitude;
+                                       const Cust_site_latitude =
+                                         e.row.Cust_site_latitude;
+                                       const Sup_site_longitude =
+                                         e.row.Sup_site_longitude;
+                                       const Sup_site_latitude =
+                                         e.row.Sup_site_latitude;
+                                       const CDocketNo = e.row.DocketNo;
+                                       const Mstatus = e.row.Mstatus;
+                                       const StatusDesc = e.row.StatusDesc;
+                                       const Truckcode = e.row.TruckCode;
+                                       const customer = e.row.CustomerCode;
+ 
+                                       setDocketNo(e.row.DocketNo);
+                                       setStatusDesc(StatusDesc);
+                                       setTruckcode(Truckcode);
+                                       setCustomer(customer);
+                                       await TruckLastLocation(CDocketNo);
+                                       //change this to "S"
+                                       //I for testing
+                                       let destinationLongitude = "";
+                                       let destinationLatitude = "";
+                                      // let MarkerText = "";
+ 
+                                       if (Mstatus === "S") {
+                                         destinationLongitude =  Sup_site_longitude;
+                                         destinationLatitude =Sup_site_latitude;
+                                         setDestinationLongitude(Sup_site_longitude);
+                                         setDestinationLatitude(Sup_site_latitude);
+                                         //before T
+                                       } else if (Mstatus === "I") {
+                                         destinationLongitude =
+                                           Cust_site_longitude;
+                                         destinationLatitude =
+                                           Cust_site_latitude;
+                                           setDestinationLongitude(Cust_site_longitude);
+                                           setDestinationLatitude(Cust_site_latitude);
+                                       } else {
+                                        setDestinationLongitude("");
+                                        setDestinationLatitude("");
+                                       }
+ 
+                                       setLatitudeA(truckLastLatitude);
+                                       setLongitudeA(truckLastLongitude);
+                                       setLatitudeB(destinationLatitude);
+                                       setLongitudeB(destinationLongitude);
+                                       
+                                       // Call getpolyline directly after updating the state.
+                                       getpolyline();
+ 
+                                       await GetApproxDistTime(
+                                         e.row.id,
+                                         destinationLongitude,
+                                         destinationLatitude
+                                       );
+ 
+                                       handleOpenmodal();
+                                     }}
+                                     columns={[
+                                       {
+                                         field: "TruckCode",
+                                         headerName: "Truck Code",
+                                         sortable: true,
+                                         headerAlign: "center",
+                                         width: 90,
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield",
+                                       },
+                                       {
+                                         field: "Status",
+                                         headerName: "Status",
+                                         width: 150,
+                                         sortable: true,
+                                         headerAlign: "center",
+                                         dataTooltip: "double click to view Map",
+                                         headerTooltip:
+                                           "double click to view map",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield",
+                                         valueGetter: (params) => {
+                                         //  Status = params.row.Status;
+                                           if (params.row.Status === "L") {
+                                             return "LOADING";
+                                           } else if (params.row.Status === "S") {
+                                             return "DRIVER ACCEPTED";
+                                           } else if (params.row.Status === "P") {
+                                             return "ARRIVED AT QUARY";
+                                           } else if (params.row.Status === "T") {
+                                             return "TRAVELLING";
+                                           } else if (params.row.Status === "A") {
+                                             return "ARRIVED";
+                                           } else if (params.row.Status === "N") {
+                                             return "N";
+                                           }
+                                         },
+                                         cellClassName: (params) => {
+                                           if (params.value === "LOADING") {
+                                             return "Loading";
+                                           } else if (
+                                             params.value === "DRIVER ACCEPTED"
+                                           ) {
+                                             return "Accepted";
+                                           } else if (
+                                             params.value === "ARRIVED AT QUARY"
+                                           ) {
+                                             return "Arrived_at_Quary";
+                                           } else if (
+                                             params.value === "TRAVELLING"
+                                           ) {
+                                             return "Travelling";
+                                           } else if (
+                                             params.value === "ARRIVED"
+                                           ) {
+                                             return "Arrived";
+                                           }
+                                         },
+                                       },
+                                       {
+                                         field: "CustomerCode",
+                                         headerName: "Customer",
+                                         sortable: true,
+                                         width: 80,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName:
+                                           "trucksummary_cust peertableOnfield trucksummary_customer",
+                                       },
+                                       {
+                                         field: "Region",
+                                         headerName: "Region",
+                                         sortable: true,
+                                         width: 80,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield",
+                                       },
+                                       {
+                                         field: "CustomerSite",
+                                         headerName: "Customer Site",
+                                         sortable: true,
+                                         width: 130,
+                                        // width: 230,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield",
+                                       },
+                                       {
+                                         field: "OrderNo",
+                                         headerName: "Order No",
+                                         sortable: true,
+                                         width: 90,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield",
+                                       },
+                                       {
+                                         field: "Material",
+                                         headerName: "Material",
+                                         sortable: true,
+                                         width: 80,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield ",
+                                         align: "right",
+                                       },
+                                       {
+                                         field: "PickedQty",
+                                         headerName: "Picked Qty",
+                                         width: 90,
+                                         sortable: true,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield ",
+                                         align: "right",
+                                         valueGetter: (params) => formatValueDecimal(`${params.row.PickedQty}`),
+                                       },
+                                       {
+                                         field: "AssignQty",
+                                         headerName: "Assign Qty",
+                                         sortable: true,
+                                         width: 90,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfield ",
+                                         valueGetter: (params) =>
+                                           formatValueDecimal(
+                                             `${params.row.AssignQty}`
+                                           ),
+ 
+                                         align: "right",
+                                       },
+                                       {
+                                         field: "ArriveTime",
+                                         headerName: "Arrive Time",
+                                         sortable: true,
+                                         width: 120,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName: "peertableOnfieldATime ",
+                                         align: "right",
+                                       },
+                                       {
+                                         field: "ApproxDist",
+                                         headerName: "Approx Dist",
+                                         sortable: true,
+                                         width: 90,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName:
+                                           "trucksummary_customer peertableOnfield",
+                                       },
+                                       {
+                                         field: "ApproxTime",
+                                         headerName: "Approx Time",
+                                         width: 90,
+                                         sortable: true,
+                                         headerAlign: "center",
+                                         headerClassName:
+                                           "super-app-theme--header",
+                                         cellClassName:
+                                           "trucksummary_customer peertableOnfield",
+                                       },
+                                     ]}
+                                   />{" "}
+                                   ;
+                                 </div>
+                               </div>
+                               <br></br>
+                             </CTabPane>
+                             <CTabPane
+                               className="slideInBottom"
+                               data-tab="trucksummary"
+                               visible={activeKey === 2}
+                             >
+                               <br></br>
+                               <Trucksummary />{" "}
+                             </CTabPane>
+                             <CTabPane
+                               className="slideInBottom"
+                               data-tab="TruckList"
+                               visible={activeKey === 2}
+                             >
+                               <br></br>
+                               <TruckList />{" "}
+                             </CTabPane>
+                           </CTabContent>
+                         </CTabs>
+                       </CCardBody>
+                     </CCard>
+                   </CCol>
+                 </CCol>
+               </CRow>
+             </div>
+           </CCardBody>
+         </CCard>
+       </React.Fragment>
+     );
+   
+ }
+ export default JobTruckEnq;
+ 
