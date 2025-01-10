@@ -10,8 +10,6 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CheckListDetails from "./Tables_CC/CheckListDetails";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
 const style = {

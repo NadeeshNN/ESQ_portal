@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { apiGetCall } from "src/generics/APIFunctions";
-
-//import TruckMap from "../map/TruckLocationMap";
 import PeerTable2 from "src/generics/table/PeerTable2";
 import TruckList from "./Tables_CC/TruckList";
 import Trucksummary from "./Tables_CC/Trucksummary";
@@ -11,20 +9,13 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
-import { CButton, CCard, CCardBody, CCardHeader, CCardTitle, CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CTabs } from "@coreui/react";
-
-//import { cilWarning, cilCheckCircle, cilCargo, cilTruck, cilList } from '@coreui/icons'; 
-//import CIcon from "@coreui/icons-react";
+import { CCard, CCardBody, CCardHeader, CCardTitle, CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CTabs } from "@coreui/react";
 import { Card } from "@material-ui/core";
-import { cilSettings, cilUser, cilHome } from '@coreui/icons'; 
-//import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-//import { Home, DirectionsCar, CheckCircle, ListAlt } from '@mui/icons-material';  // Import icons
-
 import QueueIcon from '@mui/icons-material/Queue';
 import WorkIcon from '@mui/icons-material/Work';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-//import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+
 
 const styleBreakHistory = {
   position: "absolute",
