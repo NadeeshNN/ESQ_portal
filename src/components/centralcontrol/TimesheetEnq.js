@@ -1,14 +1,5 @@
-/**
- * Created By Nadeesh Perera
- * Discription : This component  is a Main component in Central control.
- *
- */
-
-import React, { Component } from "react";
-import clsx from "clsx";
+import React, { useState, useEffect, useCallback } from "react";
 import moment from "moment";
-import RefreshIcon from "@mui/icons-material/Refresh";
-
 import {
   CCard,
   CRow,
@@ -21,7 +12,6 @@ import {
   CDropdownItem,
   CDropdownMenu,
 } from "@coreui/react";
-
 import { API_URL } from "../util/config";
 import LabelInput from "src/generics/fields/LabelInput";
 import PeerTable2 from "src/generics/table/PeerTable2";
@@ -29,14 +19,13 @@ import { apiGetCall } from "src/generics/APIFunctions";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import TruckMap from "../map/TruckLocationMap";
-import { CircularProgress, DialogTitle } from "@mui/material";
+//import { CircularProgress, DialogTitle } from "@mui/material";
 import BreakHistory from "./Tables_CC/BreakHistory";
-import { OutlinedBox } from "src/generics/fields/Outlinedbox";
+//import { OutlinedBox } from "src/generics/fields/Outlinedbox";
 import { Button } from "@material-ui/core";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-// const API_URL = window.GlobalAppConfigs.API_URL;
 
 const dataFormat = [
   {
@@ -59,8 +48,9 @@ const style = {
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 2,
-  borderRadius:"15px"
+  borderRadius: "15px",
 };
+
 const styleBreakHistory = {
   position: "absolute",
   top: "50%",
@@ -72,98 +62,85 @@ const styleBreakHistory = {
   boxShadow: 24,
   p: 2,
 };
+export default function TimesheetEnq  ()  {
+  const [timesheet, setTimesheet] = useState([]);
+  const [startDate, setStartDate] = useState(moment().startOf("day").format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().endOf("day").format("YYYY-MM-DD"));
+  const [selectedStartDate, setSelectedStartDate] = useState(startDate);
+  const [selectedEndDate, setSelectedEndDate] = useState(endDate);
+  
+  const [open, setOpen] = useState(false);
+  const [drivers, setDrivers] = useState([]);
+  const [driverCode, setDriverCode] = useState("");
+  const [driverName, setDriverName] = useState("");
+  const [selectedDriverCode, setSelectedDriverCode] = useState(driverCode);
+  const [selectedDriverName, setSelectedDriverName] = useState("");
 
-class TimesheetEnq extends Component {
-  state = {
-    timesheet: [],
-    startDate: moment().startOf("day").format("YYYY-MM-DD"),
-    endDate: moment().endOf("day").format("YYYY-MM-DD"),
-    // .set({ year: 2022, month: 0, date: 15 })
-    open: false,
-    drivers: [],
-    driverCode: "",
-    Name: "",
-    latitude: "",
-    longitude: "",
-    driverName: "",
-    openmodal: false,
-    isLoading: true,
-    li_locked: 0,
-    li_att_id: 0,
-    Status: "",
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const [field, setField] = useState("");
+  const [DriverCode] = useState("");
 
-    field: "",
-    DriverCode: "",
-  };
-  //login and clock in map modal
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  const [historytimesheetBreaks, setHistoryTimesheetBreaks] = useState([]);
+const [historyDate, setHistoryDate] = useState(null);
+const [historyDCode, setHistoryDCode] = useState("");
+  //const [openModal, setOpenModal] = useState(false);
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
+  // const fetchData = useCallback(() => {
+  //   setIsLoading(true);
+  //   const url = `${API_URL}centralcontol/timesheet?fromDate=${startDate}&toDate=${endDate}&driverCode=${driverCode}`;
+  //   apiGetCall(
+  //     url,
+  //     (data) => {
+  //       setTimesheet(data.ResultSet);
+  //       setIsLoading(false);
+  //     },
+  //     (error) => {
+  //       console.error(error);
+  //       setIsLoading(false);
+  //     }
+  //   );
+  // }, [startDate, endDate, driverCode]);
 
-  //breakhistroy modal
-  handleClosemodal = () => {
-    this.setState({ openmodal: false });
-  };
 
-  handleOpenmodal = () => {
-    this.setState({ openmodal: true });
-  };
-  componentDidMount = () => {
-    // check today date
-    //if(todaydate <=15){
-    // start date: 1
-    //}else{
-    //startdate : 15
-    //}
-    this.fecthData();
-    this.fecthDrivers();
-  };
+  const fetchData = useCallback(() => {
+    setIsLoading(true);
+    const url = `${API_URL}centralcontol/timesheet?fromDate=${startDate}&toDate=${endDate}&driverCode=${driverCode}`;
+    setTimesheet([]); // Clear the timesheet data before fetching new data
 
-  fecthData = () => {
-    this.setState({
-      isLoading: true,
-    });
-    const url = `${API_URL}centralcontol/timesheet?fromDate=${this.state.startDate}&toDate=${this.state.endDate}&driverCode=${this.state.driverCode}`;
-    this.setState({
-      timesheet: [],
-    });
-
-    const callback = (da) => {
-      this.setState({
-        isLoading: false,
-        timesheet: da.ResultSet,
-      });
+    const callback = (data) => {
+      setIsLoading(false);
+      setTimesheet(data.ResultSet); // Update timesheet with the fetched data
     };
 
     const error = (e) => {
       console.error(e);
+      setIsLoading(false); // Stop loading on error
     };
 
     apiGetCall(url, callback, error);
-  };
-  //drivers filter
-  fecthDrivers = () => {
+  }, [startDate, endDate, driverCode]);
+
+
+
+  const fetchDrivers = useCallback(() => {
     const url = `${API_URL}enquiry/driverlist`;
-    this.setState({
-      drivers: [],
-    });
+    apiGetCall(
+      url,
+      (data) => setDrivers(data.ResultSet),
+      (error) => console.error(error)
+    );
+  }, []);
 
-    const callback = (da) => {
-      this.setState({
-        drivers: da.ResultSet,
-      });
-    };
+  useEffect(() => {
+    fetchData();
+    fetchDrivers();
+  }, [fetchData, fetchDrivers]);
 
-    const error = (e) => {
-      console.error(e);
-    };
+  
 
-    apiGetCall(url, callback, error);
-  };
 
   //foramt date in to localdate string
   // formatDate(dateValue) {
@@ -171,7 +148,7 @@ class TimesheetEnq extends Component {
 
   //   return dateValue;
   // }
-  formatDate(dateValue) {
+  const formatDate = (dateValue) => {
     const date = new Date(dateValue);
     const options = {
       timeZone: "Australia/Sydney",
@@ -179,592 +156,605 @@ class TimesheetEnq extends Component {
       month: "numeric",
       day: "numeric",
     };
-    const formattedDate = date.toLocaleDateString("en-AU", options);
-    return formattedDate;
-  }
+    return date.toLocaleDateString("en-AU", options);
+  };
+
   //api date format include time and time zone this fomat date in to local string AUS
-  formatDateTime(dateValue) {
-    if (dateValue == "null" || dateValue == "") {
+  const formatDateTime = (dateValue) => {
+    if (!dateValue || dateValue === "null") {
       return " ";
     }
-    dateValue = new Date(dateValue).toLocaleTimeString("en-US", {
+    return new Date(dateValue).toLocaleTimeString("en-US", {
       timeZone: "Australia/Melbourne",
     });
-
-    return dateValue;
-  }
-
-  CalculateWorkHours = (TotalHours, BreakHours) => {
-    let value = Number(TotalHours) - Number(BreakHours);
-    if (value < 0) {
-      return 0;
-    } else if (value > 0) {
-      return value.toFixed(2);
-    }
   };
+  
+
+  const calculateWorkHours = (totalHours, breakHours) => {
+    const value = Number(totalHours) - Number(breakHours);
+    return value < 0 ? 0 : value.toFixed(2);
+  };
+
   //round calculation to 2points
-  Formatvalue = (BreakHours) => {
-    let value = Number(BreakHours);
-    return value.toFixed(2);
+ const formatValue = (breakHours) => {
+  const value = Number(breakHours);
+  return value.toFixed(2);
+}
+
+const handleMinus = () => {
+  // Implement functionality here
+};
+
+
+
+
+
+  const handleLookup = (item) => {
+    const data = drivers;
+    const rst = data.find((x) => x.DriverCode === item);
+
+    // setDriverCode(item);
+    // setDriverName(rst ? rst.Name : "");
+    setSelectedDriverCode(item);
+  setSelectedDriverName(rst ? rst.Name : "");
   };
 
-  handleMinus = () => {};
-
-  handleLookup = (item) => {
-    let data = this.state.drivers;
-    let rst = data.find((x) => x.DriverCode == item);
-
-    this.setState(
-      {
-        driverCode: item,
-        driverName: rst.Name,
-      },
-      () => {
-        //this.fecthData();
-      }
-    );
-  };
-  refreshPage() {
-    window.location.reload(false);
-  }
-
-  handleDateChange = (date, name) => {
-    const { startDate, endDate } = this.state;
-    if (name === "startDate") {
-      // this.setState({ startDate: date });
-      if (date > new Date(endDate)) {
-        alert("End date cannot be before start date");
-        // this.setState({ endDate: date });
-      } else {
-        this.setState({ startDate: moment(date).format("YYYY-MM-DD") });
-      }
-    } else if (name === "toDate") {
-      if (date < new Date(startDate)) {
-        alert("End date cannot be before start date");
-      } else {
-        //this.setState({ endDate: date });
-        this.setState({ endDate: moment(date).format("YYYY-MM-DD") });
-      }
-    }
+  const handleClose = () => {
+    setOpen(false);
   };
 
-  // handleDateChange = (date, name) => {
-  //   const { startDate, endDate } = this.state;
-  //   if (name === "startDate") {
-  //     if (date < endDate) {
-  //       alert("start date cannot be before start date");
-  //     } else {
-  //       this.setState({ startDate: date });
-  //     }
 
-  //     if (date > endDate) {
-  //       this.setState({ endDate: date });
-  //     }
-  //   } else if (name === "toDate") {
-  //     if (date < new Date(startDate)) {
-  //       alert("End date cannot be before start date");
-  //     } else {
-  //       this.setState({ endDate: date });
-  //     }
-  //   }
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  
+
+  //breakhistroy modal
+  const handleCloseModal = () => {
+    setOpenModal(false); // Set openModal state to false to close the modal
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+
+  
+
+  // const refreshPage = () => {
+  //   window.location.reload(false);
   // };
 
-  render() {
-    return (
-      <React.Fragment>
-        <CCard>
-          <CCardHeader className="headerEQ">TimeSheet Enquiry</CCardHeader>
-          <CCardBody>
-            <br></br>
-            <CContainer>
-              <CRow>
-                <CCol md={2}>
-                  <LabelInput
-                    type="date"
-                    name="startdate"
-                    label="Start Date"
-                    value={this.state.startDate}
-                    onChange={(event) => {
-                      const date = event.target.value;
-                      this.handleDateChange(new Date(date), "startDate");
-                    }}
-                    style={{ width: "100px" }}
-                  />
-                </CCol>
 
-                <CCol md={2}>
-                  <LabelInput
-                    type="date"
-                    name="toDate"
-                    label="End Date"
-                    minDate={new Date(this.state.startDate)}
-                    value={this.state.endDate}
-                    onChange={(event) => {
-                      const date = event.target.value;
+  const handleDateChange = (date, name) => {
+    if (name === "startDate") {
+      if (date > new Date(selectedEndDate)) {
+        alert("End date cannot be before start date");
+      } else {
+        setSelectedStartDate(moment(date).format("YYYY-MM-DD"));
+      }
+    } else if (name === "toDate") {
+      if (date < new Date(selectedStartDate)) {
+        alert("End date cannot be before start date");
+      } else {
+        setSelectedEndDate(moment(date).format("YYYY-MM-DD"));
+      }
+    }
+  };
+  
 
-                      this.handleDateChange(new Date(date), "toDate");
-                      // this.setState({ endDate: date }, () => {
-                      //   // this.fecthData();
-                      // });
-                    }}
-                  />
-                </CCol>
+  const handleGoClick = () => {
+    if (selectedStartDate > selectedEndDate) {
+      alert("End date cannot be before start date");
+    } else {
+      setStartDate(selectedStartDate);
+      setEndDate(selectedEndDate);
+     // setDriverCode(selectedDriverCode);
+    //setDriverName(selectedDriverName);
+      fetchData(); // Ensure fetchData is correctly implemented
+    }
+  };
+  
 
-                <CCol md={1.7}>
-                  <CDropdown
-                    style={{
-                      marginTop: 45,
-                    }}
-                  >
-                    <CDropdownToggle color="secondary">
-                      Date Filter
-                    </CDropdownToggle>
-                    <CDropdownMenu>
-                      <CDropdownItem
-                        onClick={() => {
-                          const startDate = moment()
-                            .startOf("day")
-                            .format("YYYY-MM-DD");
-                          const endDate = moment()
-                            .endOf("day")
-                            .format("YYYY-MM-DD");
-                          this.setState({ endDate, startDate }, () => {
-                            this.fecthData();
-                          });
-                        }}
-                      >
-                        Today
-                      </CDropdownItem>
-                      <CDropdownItem
-                        onClick={() => {
-                          const startDate = moment()
-                            .startOf("week")
-                            .format("YYYY-MM-DD");
-                          const endDate = moment()
-                            .endOf("week")
-                            .format("YYYY-MM-DD");
-                          this.setState({ endDate, startDate }, () => {
-                            this.fecthData();
-                          });
-                        }}
-                      >
-                        Week
-                      </CDropdownItem>
-                      <CDropdownItem
-                        onClick={() => {
-                          const startDate = moment()
-                            .startOf("month")
-                            .format("YYYY-MM-DD");
-                          const endDate = moment()
-                            .endOf("month")
-                            .format("YYYY-MM-DD");
-                          this.setState({ endDate, startDate }, () => {
-                            this.fecthData();
-                          });
-                        }}
-                      >
-                        Month
-                      </CDropdownItem>
-                      <CDropdownItem
-                        onClick={() => {
-                          const startDate = moment()
-                            .startOf("year")
-                            .format("YYYY-MM-DD");
-                          const endDate = moment()
-                            .endOf("year")
-                            .format("YYYY-MM-DD");
-                          this.setState({ endDate, startDate }, () => {
-                            this.fecthData();
-                          });
-                        }}
-                      >
-                        Year
-                      </CDropdownItem>
-                    </CDropdownMenu>
-                  </CDropdown>
-                </CCol>
-                <CCol md={3}>
-                  <LabelInput
-                    type="lookup"
-                    name="PlantCode"
-                    label="Driver Code"
-                    data={this.state.drivers}
-                    dataKey="ResultSet"
-                    valueField={"DriverCode"}
-                    value={this.state.driverCode}
-                    shrink={true}
-                    dataFormat={dataFormat}
-                    onChange={(item) => {
-                      this.handleLookup(item);
-                    }}
-                    style={{ width: "130px", marginLeft: 30 }}
-                  />
-                </CCol>
-                <CCol md={2}>
-                  <LabelInput
-                    type="lookup"
-                    name="driverName"
-                    label=""
-                    value={this.state.driverName}
-                    dissabled={true}
-                    hideIcon={true}
-                    style={{ marginLeft: -50 }}
-                  />
-                </CCol>
+  const handleDateChangeFilter = (newStartDate, newEndDate) => {
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
+    fetchData();
+  };
 
-                <CCol sm="auto">
-                  <Button
-                    style={{
-                      marginTop: 45,
-                      marginLeft: 50,
+  // const formatDate = (dateValue) => {
+  //   const date = new Date(dateValue);
+  //   return date.toLocaleDateString("en-AU", {
+  //     timeZone: "Australia/Sydney",
+  //     year: "numeric",
+  //     month: "numeric",
+  //     day: "numeric",
+  //   });
+  // };
 
-                      backgroundColor: "black",
-                    }}
-                    onClick={() => {
-                      if (this.state.startDate > this.state.endDate) {
-                        alert("End date cannot be before start date");
-                        this.setState({
-                          endDate: moment().format("YYYY-MM-DD"),
-                        });
-                      } else {
-                        this.fecthData();
-                      }
-                    }}
+  // const formatDateTime = (dateValue) => {
+  //   if (!dateValue) return " ";
+  //   const date = new Date(dateValue);
+  //   return date.toLocaleTimeString("en-US", {
+  //     timeZone: "Australia/Melbourne",
+  //   });
+  // };
+
+  return (
+    <React.Fragment>
+    <CCard>
+      <CCardHeader className="headerEQ">TimeSheet Enquiry</CCardHeader>
+      <CCardBody>
+        <br></br>
+        <CContainer>
+          <CRow>
+            <CCol md={2}>
+              <LabelInput
+                type="date"
+                name="startdate"
+                label="Start Date"
+                value={selectedStartDate}
+                //onChange={(event) => handleDateChange(event.target.value, "startDate")}
+                onChange={(event) => {
+                  const date = event.target.value;
+                  handleDateChange(new Date(date), "startDate");
+                }}
+                style={{ width: "100px" }}
+              />
+            </CCol>
+
+            <CCol md={2}>
+              <LabelInput
+                type="date"
+                name="toDate"
+                label="End Date"
+                minDate={startDate}
+                value={selectedEndDate}
+               // onChange={(event) => handleDateChange(event.target.value, "endDate")}
+               onChange={(event) => {
+                const date = event.target.value;
+                console.log("Selected Start Date:", date); // Debugging log
+                handleDateChange(new Date(date), "toDate");
+              }}
+              />
+            </CCol>
+
+            <CCol md={1.7}>
+      <CDropdown style={{ marginTop: 45 }}>
+        <CDropdownToggle color="secondary">Date Filter</CDropdownToggle>
+        <CDropdownMenu>
+          <CDropdownItem
+            onClick={() =>
+              handleDateChangeFilter(
+                moment().startOf("day").format("YYYY-MM-DD"),
+                moment().endOf("day").format("YYYY-MM-DD")
+              )
+            }
+          >
+            Today
+          </CDropdownItem>
+          <CDropdownItem
+            onClick={() =>
+              handleDateChangeFilter(
+                moment().startOf("week").format("YYYY-MM-DD"),
+                moment().endOf("week").format("YYYY-MM-DD")
+              )
+            }
+          >
+            Week
+          </CDropdownItem>
+          <CDropdownItem
+            onClick={() =>
+              handleDateChangeFilter(
+                moment().startOf("month").format("YYYY-MM-DD"),
+                moment().endOf("month").format("YYYY-MM-DD")
+              )
+            }
+          >
+            Month
+          </CDropdownItem>
+          <CDropdownItem
+            onClick={() =>
+              handleDateChangeFilter(
+                moment().startOf("year").format("YYYY-MM-DD"),
+                moment().endOf("year").format("YYYY-MM-DD")
+              )
+            }
+          >
+            Year
+          </CDropdownItem>
+        </CDropdownMenu>
+      </CDropdown>
+    </CCol>
+
+            <CCol md={3}>
+              <LabelInput
+                type="lookup"
+                name="PlantCode"
+                label="Driver Code"
+                data={drivers}
+                dataKey="ResultSet"
+                valueField={"DriverCode"}
+                value={selectedDriverCode}
+                shrink={true}
+                dataFormat={dataFormat}
+                onChange={handleLookup}
+                style={{ width: "130px", marginLeft: 30 }}
+              />
+            </CCol>
+            <CCol md={2}>
+              <LabelInput
+                type="lookup"
+                name="driverName"
+                label=""
+                value={selectedDriverName}
+                dissabled={true}
+                hideIcon={true}
+                style={{ marginLeft: -50 }}
+              />
+            </CCol>
+
+            {/* <CCol sm="auto">
+      <Button
+        style={{
+          marginTop: 45,
+          marginLeft: 50,
+          backgroundColor: "black",
+        }}
+        onClick={() => {
+          if (startDate > endDate) {
+            alert("End date cannot be before start date");
+            setEndDate(moment().format("YYYY-MM-DD")); // Reset endDate to today's date if invalid
+          } else {
+            fetchData();
+          }
+        }}
+        variant="contained"
+        color="primary"
+        title="execute"
+      >
+        GO
+        <PlayCircleFilledIcon style={{ marginLeft: 10 }} />
+      </Button>
+    </CCol> */}
+
+<CCol sm="auto">
+  <Button
+    style={{
+      marginTop: 45,
+      marginLeft: 50,
+      backgroundColor: "black",
+    }}
+    onClick={() => handleGoClick()}
+    variant="contained"
+    color="primary"
+    title="Execute"
+  >
+    GO
+    <PlayCircleFilledIcon style={{ marginLeft: 10 }} />
+  </Button>
+</CCol>
+
+          </CRow>
+        </CContainer>
+
+        <br />
+        <br />
+        <br />
+        <></>
+        {!isLoading ? ( //circular progress animation -loading
+          <PeerTable2
+            name="TimesheetEnq"
+            data={timesheet == null ? [] : timesheet}
+            rowHeight={33}
+            pageSize={20}
+            headerHeight={40}
+            style={{ fontSize: "10px", width: "100%" }}
+            columnGroupingModel={[
+              // top Main Groups
+              {
+                headerClassName: "loginH",
+                groupId: "LOG - IN/OUT",
+                description: "",
+                children: [
+                  { field: "LogIn" },
+                  { field: "LogOut" },
+                  { field: "l1" },
+                ],
+              },
+              {
+                headerClassName: "clockInH",
+                groupId: "CLOCK - IN/OUT",
+                description: "",
+                children: [
+                  { field: "ClockIn" },
+                  { field: "ClockOut" },
+                  { field: "l2" },
+                ],
+              },
+              {
+                headerClassName: "breakInH",
+                groupId: "BREAK TIME",
+                description: "",
+                children: [
+                  { field: "Breakhistory" },
+                  { field: "BreakHours" },
+                ],
+              },
+            ]}
+            columns={[
+              {
+                field: "DriverCode",
+                headerName: "Driver Code",
+                sortable: true,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+              },
+              {
+                field: "Status",
+                headerName: "Status",
+                sortable: true,
+                width: 80,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) => {
+                  if (params.row.Status === 0) {
+                    return "Locked";
+                  } else if (params.row.Status === 1) {
+                    return "Active";
+                  } else {
+                    return "Resolved";
+                  }
+                },
+                cellClassName: (params) => {
+                  if (params.value === "Locked") {
+                    return "Tsheet_Locked";
+                  } else if (params.value === "Resolved") {
+                    return "Tsheet_Resolved";
+                  } else if (params.value === "Active") {
+                    return "Tsheet_Active";
+                  }
+                },
+              },
+              {
+                field: "EquipCode",
+                headerName: "Truck Code",
+                sortable: true,
+                type: "button",
+                width: 85,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+              },
+              {
+                field: "Date",
+                headerName: "Date",
+                width: 90,
+                sortable: true,
+                type: "button",
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) => formatDate(params.row.Date),
+              },
+              {
+                field: "LogIn",
+                headerName: "Log In Time",
+                width: 80,
+                sortable: false,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) => formatDateTime(params.row.LogIn),
+              },
+              {
+                field: "LogOut",
+                headerName: "Log Off Time",
+                sortable: false,
+                width: 80,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) => formatDateTime(params.row.ClockOut),
+              },
+              {
+                field: "l1",
+                headerName: "Map",
+                sortable: false,
+                width: 86,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                renderCell: (params) => (
+                  <button
+                    className="loginB"
                     variant="contained"
                     color="primary"
-                    title="excute"
+                    size="small"
+                    onClick={() => {
+                   //   let Mapurl = "";
+                   const logInLatitude = params.row.LogInLatitude;
+                   const logInLongitude = params.row.LogInLongitude;
+                   const driverCode = params.row.DriverCode;
+                   const field = formatDate(params.row.Date);
+             
+                   // Update state using hooks
+                   setLatitude(logInLatitude);
+                   setLongitude(logInLongitude);
+                   setDriverCode(driverCode);
+                   setField(field);
+
+                   if (logInLatitude === 0) {
+                    window.alert("No location data");
+                    return;
+                  }
+                    //  Mapurl = `https://www.google.com/maps/?q=${LogInLatitude},${LogInLongitude}`;
+                      // window.open(Mapurl);
+                      handleOpen();
+                    }}
                   >
-                    GO
-                    <PlayCircleFilledIcon style={{ marginLeft: 10 }} />
-                  </Button>
-                </CCol>
-              </CRow>
-            </CContainer>
+                    view Map
+                  </button>
+                ),
+              },
+              {
+                field: "ClockIn",
+                headerName: "Clock In Time",
+                sortable: false,
+                width: 86,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) =>
+                  formatDateTime(params.row.ClockIn),
+              },
+              {
+                field: "ClockOut",
+                headerName: "Clock Out Time",
+                sortable: false,
+                width: 120,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) =>
+                  formatDateTime(params.row.ClockOut),
+              },
+              {
+                field: "l2",
+                headerName: "Map",
+                sortable: false,
+                headerAlign: "center",
+                width: 86,
+                headerClassName: "super-app-theme--header",
+                renderCell: (params) => (
+                  <button
+                    className="clockInB"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => {
+                     // let Mapurl = "";
 
-            <br />
-            <br />
-            <br />
-            <></>
-            {!this.state.isLoading ? ( //circular progress animation -loading
-              <PeerTable2
-                name="TimesheetEnq"
-                data={this.state.timesheet == null ? [] : this.state.timesheet}
-                rowHeight={33}
-                pageSize={20}
-                headerHeight={40}
-                style={{ fontSize: "10px", width: "100%" }}
-                columnGroupingModel={[
-                  // top Main Groups
-                  {
-                    headerClassName: "loginH",
-                    groupId: "LOG - IN/OUT",
-                    description: "",
-                    children: [
-                      { field: "LogIn" },
-                      { field: "LogOut" },
-                      { field: "l1" },
-                    ],
-                  },
-                  {
-                    headerClassName: "clockInH",
-                    groupId: "CLOCK - IN/OUT",
-                    description: "",
-                    children: [
-                      { field: "ClockIn" },
-                      { field: "ClockOut" },
-                      { field: "l2" },
-                    ],
-                  },
-                  {
-                    headerClassName: "breakInH",
-                    groupId: "BREAK TIME",
-                    description: "",
-                    children: [
-                      { field: "Breakhistory" },
-                      { field: "BreakHours" },
-                    ],
-                  },
-                ]}
-                columns={[
-                  {
-                    field: "DriverCode",
-                    headerName: "Driver Code",
-                    sortable: true,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                  },
-                  {
-                    field: "Status",
-                    headerName: "Status",
-                    sortable: true,
-                    width: 80,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) => {
-                      this.state.Status = params.row.Status;
-                      if (params.row.Status == 0) {
-                        return "Locked";
-                      } else if (params.row.Status == 1) {
-                        return "Active";
-                      } else return "Resolved";
-                    },
-                    cellClassName: (params) => {
-                      if (params.value == "Locked") {
-                        return "Tsheet_Locked";
-                      } else if (params.value == "Resolved") {
-                        return "Tsheet_Resolved";
-                      } else if (params.value == "Active") {
-                        return "Tsheet_Active";
+                      const ClockInLatitude = params.row.ClockInLatitude;
+                      const ClockInLongitude = params.row.ClockInLongitude;
+                      const DriverCode = params.row.DriverCode;
+                      const field  = formatDate(`${params.row.Date}`);
+
+                      setLatitude(ClockInLatitude);
+                      setLongitude(ClockInLongitude);
+                      setDriverCode(DriverCode);
+                      setField(field );
+          
+                      if (ClockInLatitude === 0) {
+                        window.alert("No location Data");
+                        return;
                       }
-                    },
-                  },
-                  {
-                    field: "EquipCode",
-                    headerName: "Truck Code",
-                    sortable: true,
-                    type: "button",
-                    width: 85,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                  },
-                  {
-                    field: "Date",
-                    headerName: "Date",
-                    width: 90,
-                    sortable: true,
-                    type: "button",
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.formatDate(`${params.row.Date}`),
-                  },
-                  {
-                    field: "LogIn",
-                    headerName: "Log In Time",
-                    width: 80,
-                    sortable: false,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.formatDateTime(`${params.row.LogIn}`),
-                  },
-                  {
-                    field: "LogOut",
-                    headerName: "Log Off Time",
-                    sortable: false,
-                    width: 80,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.formatDateTime(`${params.row.ClockOut}`),
-                  },
-                  {
-                    field: "l1",
-                    headerName: "Map",
-                    sortable: false,
-                    width: 86,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    renderCell: (params) => (
-                      <button
-                        className="loginB"
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => {
-                          let Mapurl = "";
-                          const LogInLatitude = params.row.LogInLatitude;
-                          const LogInLongitude = params.row.LogInLongitude;
-                          const DriverCode = params.row.DriverCode;
-                          const field = this.formatDate(`${params.row.Date}`);
+                     // Mapurl = `https://www.google.com/maps/?q=${ClockInLatitude},${ClockInLongitude}`;
+                      handleOpen();
+                    }}
+                  >
+                    view Map
+                  </button>
+                ),
+              },
 
-                          this.setState({
-                            latitude: LogInLatitude,
-                            longitude: LogInLongitude,
-                            DriverCode: DriverCode,
-                            field: field,
-                          });
-                          if (LogInLatitude == 0) {
-                            window.alert("No location Data");
-                            return;
-                          }
-                          Mapurl = `https://www.google.com/maps/?q=${LogInLatitude},${LogInLongitude}`;
-                          // window.open(Mapurl);
-                          this.handleOpen();
-                        }}
-                      >
-                        view Map
-                      </button>
-                    ),
-                  },
-                  {
-                    field: "ClockIn",
-                    headerName: "Clock In Time",
-                    sortable: false,
-                    width: 86,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.formatDateTime(`${params.row.ClockIn}`),
-                  },
-                  {
-                    field: "ClockOut",
-                    headerName: "Clock Out Time",
-                    sortable: false,
-                    width: 120,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.formatDateTime(`${params.row.ClockOut}`),
-                  },
-                  {
-                    field: "l2",
-                    headerName: "Map",
-                    sortable: false,
-                    headerAlign: "center",
-                    width: 86,
-                    headerClassName: "super-app-theme--header",
-                    renderCell: (params) => (
-                      <button
-                        className="clockInB"
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => {
-                          let Mapurl = "";
+              {
+                field: "Breakhistory",
+                headerName: "Break History",
+                sortable: false,
+                width: 110,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                renderCell: (params) => (
+                  <button
+                    className="breakInB"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => {
+                      const DriverCode = params.row.DriverCode;
+                      const Date = params.row.Date;
+                      const timesheetBreaks = params.row.timesheetBreaks;
+                      setHistoryTimesheetBreaks(timesheetBreaks);
+                      setHistoryDate(Date);
+                      setHistoryDCode(DriverCode);
+                  
+                      handleOpenModal();
+                    }}
+                  >
+                    view History
+                  </button>
+                ),
+              },
 
-                          const ClockInLatitude = params.row.ClockInLatitude;
-                          const ClockInLongitude = params.row.ClockInLongitude;
-                          const DriverCode = params.row.DriverCode;
-                          const field = this.formatDate(`${params.row.Date}`);
-                          this.setState({
-                            latitude: ClockInLatitude,
-                            longitude: ClockInLongitude,
-                            DriverCode: DriverCode,
-                            field: field,
-                          });
-                          if (ClockInLatitude == 0) {
-                            window.alert("No location Data");
-                            return;
-                          }
-                          Mapurl = `https://www.google.com/maps/?q=${ClockInLatitude},${ClockInLongitude}`;
-                          this.handleOpen();
-                        }}
-                      >
-                        view Map
-                      </button>
-                    ),
-                  },
+              {
+                field: "BreakHours",
+                headerName: "Breaking Hours",
+                sortable: false,
+                width: 120,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) => formatValue(`${params.row.BreakHours}`),
+              },
+              {
+                field: "workingHours",
+                headerName: "working Hours",
+                sortable: false,
+                width: 110,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+                valueGetter: (params) =>
+        calculateWorkHours(`${params.row.TotalHours}`, `${params.row.BreakHours}`),
+              },
+              {
+                field: "TotalHours",
+                headerName: "Total Hours",
+                sortable: false,
+                width: 100,
+                headerAlign: "center",
+                headerClassName: "super-app-theme--header",
+              },
+            ]}
+          />
+        ) : (
+          <LinearProgress />
+          // <CircularProgress />
+        )}
+        <Modal
+          className="modalsize"
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            {/* <DialogTitle style={{ fontSize: "15px", fontStyle: "bold" }}>
+              Modal Title
+            </DialogTitle> */}
+            <TruckMap
+              latitude={latitude}
+              longitude={longitude}
+              field={field}
+             // DriverCode={DriverCode}
+            />
+          </Box>
+        </Modal>
+        <Modal
+          className=""
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={styleBreakHistory}>
+            <BreakHistory
+              startDate={startDate}
+              endDate={endDate}
+              driverCode={driverCode}
+              historytimesheetBreaks={historytimesheetBreaks}
+              historyDate={historyDate}
+              historyDCode={historyDCode}
+            />
+          </Box>
+        </Modal>
+      </CCardBody>
+    </CCard>
+  </React.Fragment>
 
-                  {
-                    field: "Breakhistory",
-                    headerName: "Break History",
-                    sortable: false,
-                    width: 110,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    renderCell: (params) => (
-                      <button
-                        className="breakInB"
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => {
-                          const DriverCode = params.row.DriverCode;
-                          const Date = params.row.Date;
-                          const timesheetBreaks = params.row.timesheetBreaks;
-                          this.setState({
-                            historytimesheetBreaks: timesheetBreaks,
-                            historyDate: Date,
-                            historyDCode: DriverCode,
-                          });
+  );
+};
 
-                          this.handleOpenmodal();
-                        }}
-                      >
-                        view History
-                      </button>
-                    ),
-                  },
-
-                  {
-                    field: "BreakHours",
-                    headerName: "Breaking Hours",
-                    sortable: false,
-                    width: 120,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.Formatvalue(`${params.row.BreakHours}`),
-                  },
-                  {
-                    field: "workingHours",
-                    headerName: "working Hours",
-                    sortable: false,
-                    width: 110,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                    valueGetter: (params) =>
-                      this.CalculateWorkHours(
-                        `${params.row.TotalHours}`,
-                        `${params.row.BreakHours}`
-                      ),
-                  },
-                  {
-                    field: "TotalHours",
-                    headerName: "Total Hours",
-                    sortable: false,
-                    width: 100,
-                    headerAlign: "center",
-                    headerClassName: "super-app-theme--header",
-                  },
-                ]}
-              />
-            ) : (
-              <LinearProgress />
-              // <CircularProgress />
-            )}
-            <Modal
-              className="modalsize"
-              open={this.state.open}
-              onClose={this.handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                {/* <DialogTitle style={{ fontSize: "15px", fontStyle: "bold" }}>
-                  Modal Title
-                </DialogTitle> */}
-                <TruckMap
-                  latitude={this.state.latitude}
-                  longitude={this.state.longitude}
-                  field={this.state.field}
-                  DriverCode={this.state.DriverCode}
-                />
-              </Box>
-            </Modal>
-            <Modal
-              className=""
-              open={this.state.openmodal}
-              onClose={this.handleClosemodal}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={styleBreakHistory}>
-                <BreakHistory
-                  startDate={this.state.startDate}
-                  endDate={this.state.endDate}
-                  driverCode={this.state.driverCode}
-                  historytimesheetBreaks={this.state.historytimesheetBreaks}
-                  historyDate={this.state.historyDate}
-                  historyDCode={this.state.historyDCode}
-                />
-              </Box>
-            </Modal>
-          </CCardBody>
-        </CCard>
-      </React.Fragment>
-    );
-  }
-}
-export default TimesheetEnq;
+//export default TimesheetEnq;
