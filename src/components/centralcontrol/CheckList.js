@@ -181,6 +181,18 @@ const CheckList = () => {
               style={{ fontSize: "10px", width: "100%" }}
               headerHeight={40}
               columns={columns}
+              componentsProps={{
+                pagination: {
+                  sx: {
+                   
+                    "& .MuiSelect-select": {
+                    
+                      transform: "translateY(20%)",
+                    },
+                    
+                  },
+                },
+              }}
               onCellDoubleClick={(e) => {
                 setField(e.field);
                 setDriverCode(e.row.DriverCode);
