@@ -69,17 +69,17 @@ export default function TimesheetEnq  ()  {
   
   const [open, setOpen] = useState(false);
   const [drivers, setDrivers] = useState([]);
-  //const [DriverCode, setDriverCode] = useState("");
+
+ 
   const [driverCode, setdriverCode] = useState("");
   const [DriverCode, setDriverCode] = useState("");
   
   const [driverName, setDriverName] = useState("");
   const [selectedDriverCode, setSelectedDriverCode] = useState(""); // Temporarily selected driver code
   const [selectedDriverName, setSelectedDriverName] = useState(""); // Temporarily selected driver name
+ 
 
-  //const [isGoClicked, setIsGoClicked] = useState(false);
-  // const [selectedDriverCode, setSelectedDriverCode] = useState(DriverCode);
-  // const [selectedDriverName, setSelectedDriverName] = useState(driverName);
+ 
   
 
   const [openModal, setOpenModal] = useState(false);
@@ -235,23 +235,25 @@ const handleMinus = () => {
   };
   
 
-  const handleGoClick = () => {
-    if (selectedStartDate > selectedEndDate) {
-      alert("End date cannot be before start date");
-    } else {
-      setStartDate(selectedStartDate);
-      setEndDate(selectedEndDate);
-      setDriverCode(selectedDriverCode); // Update displayed driver code
-      setDriverName(selectedDriverName);
-  //    setDriverCode(DriverCode);
-  //  setDriverName(driverName);
   
-  
-      fetchData(); // Ensure fetchData is correctly implemented
-     // setIsGoClicked(true);
-    }
-  };
-  
+
+useEffect(() => {
+  if (DriverCode && driverName) {
+    fetchData();
+  }
+}, [DriverCode, driverName]);
+
+const handleGoClick = () => {
+  if (selectedStartDate > selectedEndDate) {
+    alert("End date cannot be before start date");
+  } else {
+    setStartDate(selectedStartDate);
+    setEndDate(selectedEndDate);
+    setDriverCode(selectedDriverCode);
+    setDriverName(selectedDriverName);
+  }
+};
+
 
   const handleDateChangeFilter = (newStartDate, newEndDate) => {
     setStartDate(newStartDate);
@@ -259,23 +261,7 @@ const handleMinus = () => {
     fetchData();
   };
 
-  // const formatDate = (dateValue) => {
-  //   const date = new Date(dateValue);
-  //   return date.toLocaleDateString("en-AU", {
-  //     timeZone: "Australia/Sydney",
-  //     year: "numeric",
-  //     month: "numeric",
-  //     day: "numeric",
-  //   });
-  // };
-
-  // const formatDateTime = (dateValue) => {
-  //   if (!dateValue) return " ";
-  //   const date = new Date(dateValue);
-  //   return date.toLocaleTimeString("en-US", {
-  //     timeZone: "Australia/Melbourne",
-  //   });
-  // };
+ 
 
   return (
     <React.Fragment>
