@@ -105,6 +105,18 @@ export default class Trucksummary extends Component {
           headerHeight={32}
           sortIconStyle={{ color: "white" }}
           style={{ fontSize: "12px", width: "100%" }}
+          componentsProps={{
+            pagination: {
+              sx: {
+               
+                "& .MuiSelect-select": {
+                
+                  transform: "translateY(20%)",
+                },
+                
+              },
+            },
+          }}
           columns={[
             {
               field: "Sorder_no",

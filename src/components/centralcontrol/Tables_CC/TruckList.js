@@ -329,6 +329,18 @@ export default class TruckList extends Component {
             rowHeight={23}
             headerHeight={32}
             fontsize={12}
+            componentsProps={{
+              pagination: {
+                sx: {
+                 
+                  "& .MuiSelect-select": {
+                  
+                    transform: "translateY(20%)",
+                  },
+                  
+                },
+              },
+            }}
             columns={this.state.columns}
             headerClassName="peerTableHeader"
           />

@@ -69,43 +69,37 @@ export default function TimesheetEnq  ()  {
   
   const [open, setOpen] = useState(false);
   const [drivers, setDrivers] = useState([]);
-  const [driverCode, setDriverCode] = useState("");
+  //const [DriverCode, setDriverCode] = useState("");
+  const [driverCode, setdriverCode] = useState("");
+  const [DriverCode, setDriverCode] = useState("");
+  
   const [driverName, setDriverName] = useState("");
-  const [selectedDriverCode, setSelectedDriverCode] = useState(driverCode);
-  const [selectedDriverName, setSelectedDriverName] = useState("");
+  const [selectedDriverCode, setSelectedDriverCode] = useState(""); // Temporarily selected driver code
+  const [selectedDriverName, setSelectedDriverName] = useState(""); // Temporarily selected driver name
+
+  //const [isGoClicked, setIsGoClicked] = useState(false);
+  // const [selectedDriverCode, setSelectedDriverCode] = useState(DriverCode);
+  // const [selectedDriverName, setSelectedDriverName] = useState(driverName);
+  
 
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [field, setField] = useState("");
-  const [DriverCode] = useState("");
+ 
 
   const [historytimesheetBreaks, setHistoryTimesheetBreaks] = useState([]);
 const [historyDate, setHistoryDate] = useState(null);
 const [historyDCode, setHistoryDCode] = useState("");
   //const [openModal, setOpenModal] = useState(false);
 
-  // const fetchData = useCallback(() => {
-  //   setIsLoading(true);
-  //   const url = `${API_URL}centralcontol/timesheet?fromDate=${startDate}&toDate=${endDate}&driverCode=${driverCode}`;
-  //   apiGetCall(
-  //     url,
-  //     (data) => {
-  //       setTimesheet(data.ResultSet);
-  //       setIsLoading(false);
-  //     },
-  //     (error) => {
-  //       console.error(error);
-  //       setIsLoading(false);
-  //     }
-  //   );
-  // }, [startDate, endDate, driverCode]);
+  
 
 
   const fetchData = useCallback(() => {
     setIsLoading(true);
-    const url = `${API_URL}centralcontol/timesheet?fromDate=${startDate}&toDate=${endDate}&driverCode=${driverCode}`;
+    const url = `${API_URL}centralcontol/timesheet?fromDate=${startDate}&toDate=${endDate}&DriverCode=${DriverCode}`;
     setTimesheet([]); // Clear the timesheet data before fetching new data
 
     const callback = (data) => {
@@ -119,7 +113,7 @@ const [historyDCode, setHistoryDCode] = useState("");
     };
 
     apiGetCall(url, callback, error);
-  }, [startDate, endDate, driverCode]);
+  }, [startDate, endDate, DriverCode]);
 
 
 
@@ -140,12 +134,7 @@ const [historyDCode, setHistoryDCode] = useState("");
   
 
 
-  //foramt date in to localdate string
-  // formatDate(dateValue) {
-  //   dateValue = new Date(dateValue).toLocaleDateString("en-AU");
-
-  //   return dateValue;
-  // }
+  
   const formatDate = (dateValue) => {
     const date = new Date(dateValue);
     const options = {
@@ -187,14 +176,15 @@ const handleMinus = () => {
 
 
 
-  const handleLookup = (item) => {
-    const data = drivers;
-    const rst = data.find((x) => x.DriverCode === item);
+  
 
-    // setDriverCode(item);
-    // setDriverName(rst ? rst.Name : "");
-    setSelectedDriverCode(item);
-  setSelectedDriverName(rst ? rst.Name : "");
+  const handleLookup = (item) => {
+    const rst = drivers.find((x) => x.DriverCode === item);
+  //  setDriverCode(item);
+  //  setDriverName(rst?.Name || "");
+  setSelectedDriverCode(item); // Temporarily store selected driver code
+  setSelectedDriverName(rst?.Name || "");
+  
   };
 
   const handleClose = () => {
@@ -203,6 +193,10 @@ const handleMinus = () => {
 
 
   const handleOpen = () => {
+    // setLatitude(latitude);
+    // setLongitude(longitude);
+    // setField(field);
+    // setDriverCode(DriverCode);
     setOpen(true);
   };
   
@@ -247,9 +241,14 @@ const handleMinus = () => {
     } else {
       setStartDate(selectedStartDate);
       setEndDate(selectedEndDate);
-     // setDriverCode(selectedDriverCode);
-    //setDriverName(selectedDriverName);
+      setDriverCode(selectedDriverCode); // Update displayed driver code
+      setDriverName(selectedDriverName);
+  //    setDriverCode(DriverCode);
+  //  setDriverName(driverName);
+  
+  
       fetchData(); // Ensure fetchData is correctly implemented
+     // setIsGoClicked(true);
     }
   };
   
@@ -392,29 +391,7 @@ const handleMinus = () => {
               />
             </CCol>
 
-            {/* <CCol sm="auto">
-      <Button
-        style={{
-          marginTop: 45,
-          marginLeft: 50,
-          backgroundColor: "black",
-        }}
-        onClick={() => {
-          if (startDate > endDate) {
-            alert("End date cannot be before start date");
-            setEndDate(moment().format("YYYY-MM-DD")); // Reset endDate to today's date if invalid
-          } else {
-            fetchData();
-          }
-        }}
-        variant="contained"
-        color="primary"
-        title="execute"
-      >
-        GO
-        <PlayCircleFilledIcon style={{ marginLeft: 10 }} />
-      </Button>
-    </CCol> */}
+           
 
 <CCol sm="auto">
   <Button
@@ -423,7 +400,7 @@ const handleMinus = () => {
       marginLeft: 50,
       backgroundColor: "black",
     }}
-    onClick={() => handleGoClick()}
+    onClick={ handleGoClick}
     variant="contained"
     color="primary"
     title="Execute"
@@ -565,28 +542,30 @@ const handleMinus = () => {
                     color="primary"
                     size="small"
                     onClick={() => {
-                   //   let Mapurl = "";
-                   const logInLatitude = params.row.LogInLatitude;
-                   const logInLongitude = params.row.LogInLongitude;
-                   const driverCode = params.row.DriverCode;
-                   const field = formatDate(params.row.Date);
-             
-                   // Update state using hooks
-                   setLatitude(logInLatitude);
-                   setLongitude(logInLongitude);
-                   setDriverCode(driverCode);
-                   setField(field);
-
-                   if (logInLatitude === 0) {
-                    window.alert("No location data");
-                    return;
-                  }
-                    //  Mapurl = `https://www.google.com/maps/?q=${LogInLatitude},${LogInLongitude}`;
-                      // window.open(Mapurl);
+                      let Mapurl = "";
+                      const logInLatitude = params.row.LogInLatitude;
+                      const logInLongitude = params.row.LogInLongitude;
+                      const DriverCode = params.row.DriverCode;
+                      const field = formatDate(params.row.Date);
+              
+                      // Update modal-related state using hooks
+                       setLatitude(logInLatitude);
+                       setLongitude(logInLongitude);
+                       setdriverCode(DriverCode);
+                       setField(field);
+              
+                      if (logInLatitude === 0) {
+                        window.alert("No location data");
+                        return;
+                      }
+              
+                      Mapurl = `https://www.google.com/maps/?q=${logInLatitude},${logInLongitude}`;
+              
+                     
                       handleOpen();
                     }}
                   >
-                    view Map
+                    View Map
                   </button>
                 ),
               },
@@ -624,7 +603,7 @@ const handleMinus = () => {
                     color="primary"
                     size="small"
                     onClick={() => {
-                     // let Mapurl = "";
+                      let Mapurl = "";
 
                       const ClockInLatitude = params.row.ClockInLatitude;
                       const ClockInLongitude = params.row.ClockInLongitude;
@@ -633,14 +612,14 @@ const handleMinus = () => {
 
                       setLatitude(ClockInLatitude);
                       setLongitude(ClockInLongitude);
-                      setDriverCode(DriverCode);
+                      setdriverCode(DriverCode);
                       setField(field );
           
                       if (ClockInLatitude === 0) {
                         window.alert("No location Data");
                         return;
                       }
-                     // Mapurl = `https://www.google.com/maps/?q=${ClockInLatitude},${ClockInLongitude}`;
+                      Mapurl = `https://www.google.com/maps/?q=${ClockInLatitude},${ClockInLongitude}`;
                       handleOpen();
                     }}
                   >
@@ -726,7 +705,7 @@ const handleMinus = () => {
               latitude={latitude}
               longitude={longitude}
               field={field}
-             // DriverCode={DriverCode}
+              DriverCode={driverCode}
             />
           </Box>
         </Modal>
@@ -741,7 +720,7 @@ const handleMinus = () => {
             <BreakHistory
               startDate={startDate}
               endDate={endDate}
-              driverCode={driverCode}
+              DriverCode={DriverCode}
               historytimesheetBreaks={historytimesheetBreaks}
               historyDate={historyDate}
               historyDCode={historyDCode}
