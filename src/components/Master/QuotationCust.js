@@ -108,7 +108,7 @@ export default function QuotationCust() {
     setPopupVisible(false); // Close the popup
     //GetCustomerCodeData(custCode); // Close the popup
 
-    // console.log("productTabledata", productTabledata);
+  
   };
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export default function QuotationCust() {
       .then((data) => {
         const ResultSet = data.ResultSet;
         const readAuth = ResultSet[0].ReadAuth;
-        console.log(readAuth);
+
 
         setPermissonDetails(ResultSet);
         setReadAuth(readAuth);
@@ -293,7 +293,7 @@ export default function QuotationCust() {
   const handlerowclickContact = () => {
     setContactDetails(rowContactDetails[0]);
     setTitle(rowContactDetails[0].Title);
-    console.log("rowContactDetails", ContactDetails);
+
   };
   const saveCustomer = () => {
     setLoading(true);
@@ -335,7 +335,7 @@ export default function QuotationCust() {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+
         setAlertType("success");
         setAlertMessage("successfully saved");
         setShowAlert(true);

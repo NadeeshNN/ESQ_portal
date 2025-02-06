@@ -2581,13 +2581,14 @@ color: #207c49;
   .custom-data-cell {
    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 10px; 
-    color: #000;
-    font-weight: 500;       /* Smaller font size */
+    color: #424141;
+    font-weight: 600;       /* Smaller font size */
     border-bottom: 1px solid #dedada; /* Add a border for better visibility */
     border-right:1px solid #000;
     padding: 1px;             /* Remove padding */
     text-align: right;
     min-width: 60px;
+   
    
   }
   .w-200{
@@ -2653,3 +2654,6 @@ color: #207c49;
   
 
 }
+
+
+

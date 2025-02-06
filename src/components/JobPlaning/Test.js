@@ -154,7 +154,7 @@ const TestTable = (props) => {
       .then((data) => {
         const Data = data.ResultSet[0];
         const jobplanData = Data?.JobPlanDetailList;
-        console.log("array",jobplanData);
+    
         const jobplanDataWithId = jobplanData.map((item, index) => ({
             ...item,
             id: index + 1, // Add a unique id starting from 1

@@ -742,7 +742,7 @@ export default function CG_Orders(props) {
               <th style={{ width: "90px" }}>Customer Details</th>
               <th style={{ width: "100px" }}>Time Required</th>
               <th style={{ width: "80px" }}>Loading Time</th>
-              <th style={{ width: "100px" }}>Delevery Address</th>
+              <th style={{ width: "100px" }}>Delivery Address</th>
               <th style={{ width: "60px" }}>Suburb</th>
               <th style={{ width: "60px" }}>UOM</th>
               <th style={{ width: "50px" }}>Order Qty</th>

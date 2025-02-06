@@ -8,32 +8,30 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import Switch from "@mui/material/Switch"; // Import Material-UI Switch
 import { LinearProgress, Tooltip } from "@mui/material";
 import Draggable from "react-draggable";
-
-
-// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-// import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-// import FormControl from "@mui/material/FormControl";
-// import InputLabel from "@mui/material/InputLabel";
-// import MenuItem from "@mui/material/MenuItem";
-// import OutlinedInput from "@mui/material/OutlinedInput";
-// import Select from "@mui/material/Select";
-// import { Box, Typography } from "@mui/material";
-// import Checkbox from "@mui/material/Checkbox";
-// import Chip from "@mui/material/Chip";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Select from "@mui/material/Select";
+import { Box, Typography } from "@mui/material";
+import Checkbox from "@mui/material/Checkbox";
+import Chip from "@mui/material/Chip";
 import {
-  //CCardBody,
+  CCardBody,
   CCol,
-  // CInput,
-  // CInputGroup,
-  // CInputGroupText,
-  // CNav,
-  // CNavItem,
-  // CNavLink,
+  CInput,
+  CInputGroup,
+  CInputGroupText,
+  CNav,
+  CNavItem,
+  CNavLink,
   CRow,
-  // CSelect,
-  // CTabContent,
-  // CTabPane,
-  // CTabs,
+  CSelect,
+  CTabContent,
+  CTabPane,
+  CTabs,
 } from "@coreui/react";
 // const ITEM_HEIGHT = 48;
 // const ITEM_PADDING_TOP = 8;
@@ -88,30 +86,30 @@ export default function JobPlaningMainTable(props) {
   const { JobplanData } = props;
   const { handlejobplaningtableDoubleclick } = props;
   const { userselectedrowinjobplaintable } = props;
-  const [filters, setFilters] = useState({
-    jobPlanFilter: {
-      SorderNo: 0,
-      JobName: "",
-      CustName: "",
-      CustOrderNo: "",
-      CustDetails: "",
-      DateRequired: "",
-      DeliveryTime: "",
-      DeliveryEndTime: "",
-      CatlogCode: "",
-      SupplierStore: "",
-      DeliveryAddress: "",
-      Suburb: "",
-      TruckTypeDisplay: "",
-      QuoteFlg: false,
-    },
-    regionFilter: regionFilters,
-    dateFrom: "2023-01-08",
-    dateTo: "2023-01-08",
-    completedJobToggle: 1,
-    HideCompletedJob: false,
-  });
- 
+  const { filters, setFilters } = props;
+  // const [filters, setFilters] = useState({
+  //   jobPlanFilter: {
+  //     SorderNo: 0,
+  //     JobName: "",
+  //     CustName: "",
+  //     CustOrderNo: "",
+  //     CustDetails: "",
+  //     DateRequired: "",
+  //     DeliveryTime: "",
+  //     DeliveryEndTime: "",
+  //     CatlogCode: "",
+  //     SupplierStore: "",
+  //     DeliveryAddress: "",
+  //     Suburb: "",
+  //     TruckTypeDisplay: "",
+  //     QuoteFlg: false,
+  //   },
+  //   regionFilter: regionFilters,
+  //   dateFrom: "2023-01-08",
+  //   dateTo: "2023-01-08",
+  //   completedJobToggle: 1,
+  //   HideCompletedJob: false,
+  // });
   const [columns, setColumns] = useState([
     { id: "sel", label: "Sel", width: "100px" },
     { id: "deliveryOn", label: "Delivery Date", width: "100px" },
@@ -136,12 +134,7 @@ export default function JobPlaningMainTable(props) {
     { id: "wt", label: "W/T", width: "100px" },
     { id: "orderDate", label: "Order Date", width: "250px" }
   ]);
-
-
-
   const [columnOrder, setColumnOrder] = useState(columns.map(col => col.id));
-
-
   const toggleDropdown = () => {
     setDropdownOpen((prev) => !prev);
     // setTimeout(() => {
@@ -158,13 +151,14 @@ export default function JobPlaningMainTable(props) {
   };
 
   const handleforceCompleteAndComplete =(val)=>{
+    props.handlestatusForcecomplete()
    if(!selectedRows.length > 0){
     handleToggleColumn(val)
    }
  
 
    if (selectedRows.length > 0) {
-    console.log("selectedRows", selectedRows);
+    
     ForceCompletejob(selectedRowsData);
   } else {
     console.log("No rows selected");
@@ -178,7 +172,7 @@ export default function JobPlaningMainTable(props) {
   
  
     if (selectedRows.length > 0) {
-     console.log("selectedRows", selectedRows);
+     
     // ForceCompletejob(selectedRowsData);
    } else {
      console.log("No rows selected");
@@ -195,7 +189,7 @@ export default function JobPlaningMainTable(props) {
   // };
 
   useEffect(() => {
-    console.log("hi", ActiveColumns);
+   
     // GetDatafromCustomerCode();
   }, []);
 
@@ -227,16 +221,16 @@ export default function JobPlaningMainTable(props) {
   };
 
   const getHighlightColor = (highlightColor) => {
-    console.log(highlightColor)
+   
     switch (highlightColor) {
       case "S":
         return "#A3DDF5"; // CSS color for PALE_GREEN
       case "N":
-        return "yellow";
+        return "#A8E6A1";
       case "I":
-        return "lightcoral"; // CSS color for YELLOW
+        return "#F9E79F"; // CSS color for YELLOW
       case "I":
-        return "lightcoral";
+        return "#F9E79F";
       // Add more cases as needed
       default:
         return "transparent"; // Default color if no match
@@ -244,7 +238,7 @@ export default function JobPlaningMainTable(props) {
   };
 
   const handleRowDoubleClick = (val, val2, val3) => {
-    handlejobplaningtableDoubleclick(val, val2);
+    handlejobplaningtableDoubleclick(val, val2,val3);
     setDoubleClickedRow(val3); // Update the state with the double-clicked row ID
   };
 
@@ -260,7 +254,7 @@ export default function JobPlaningMainTable(props) {
     })
       .then((res) => res.json())
       .then((data) => {
-console.log("data",data)
+
         if(data.ReturnStatus){
           setAlertType("success");
           setAlertMessage(data?.ReturnMessage);
@@ -281,7 +275,26 @@ console.log("data",data)
       });
   };
 
-  
+  const sortByColumn = (data, columnName, order) => {
+    // sorting function
+
+
+    
+    return data.slice().sort((a, b) => {
+      const aValue = a[columnName];
+      const bValue = b[columnName];
+
+      if (order === "asc") {
+        if (aValue < bValue) return -1;
+        if (aValue > bValue) return 1;
+        return 0;
+      } else {
+        if (aValue > bValue) return -1;
+        if (aValue < bValue) return 1;
+        return 0;
+      }
+    });
+  };
   const handleDragStop = (e, data, columnId) => {
     const newOrder = [...columnOrder];
     const draggedIndex = columnOrder.indexOf(columnId);
@@ -294,6 +307,74 @@ console.log("data",data)
       newOrder.splice(targetIndex, 0, columnId);
       setColumnOrder(newOrder);
     }
+  };
+
+
+
+
+
+
+  const filteredData = JobplanData
+  ? JobplanData.filter((row) => {
+  
+    const SorderNoMatch = row.SorderNo?.toString().includes(filters.SorderNo ? filters.SorderNo.toString() : "");
+     const CustNameMatch = row.CustName?.toUpperCase().includes(filters.CustName.toUpperCase());
+    const DeliveryAddressMatch = row.DeliveryAddress?.toUpperCase().includes(filters.DeliveryAddress.toUpperCase());
+    const CityMatch = row.City?.toUpperCase().includes(filters.Suburb.toUpperCase());
+      const CatlogCodeMatch = row.CatlogCode?.toUpperCase().includes(filters.CatlogCode.toUpperCase());
+     const SupplierStoreMatch = row.SupplierStore?.toUpperCase().includes(filters.SupplierStore.toUpperCase());
+    const TruckTypeDisplayMatch = row.TruckTypeDisplay?.toUpperCase().includes(filters.TruckTypeDisplay.toUpperCase());
+      const CustOrderNoMatch = row.CustOrderNo?.toUpperCase().includes(filters.CustOrderNo.toUpperCase());
+    //  const DateRequiredMatch = row.DateRequired?.toUpperCase().includes(filters.DateRequired.toUpperCase());
+
+
+      // const TruckAllocMatch = row.TruckAlloc?.toUpperCase().includes(filters.TruckAlloc.toUpperCase());
+      // const WaitingFlgMatch = row.WaitingFlg?.toUpperCase().includes(filters.WaitingFlg.toUpperCase());
+      // const OrderDateMatch = row.OrderDate?.split("T")[0].includes(filters.OrderDate);
+      // const StatusMatch = row.Status?.toUpperCase().includes(filters.Status.toUpperCase());
+      // const BoQtyMatch = row.BoQty?.toString().includes(filters.BoQty);
+      // const UomMatch = row.Uom?.toUpperCase().includes(filters.Uom.toUpperCase());
+      // const OrderQtyMatch = row.OrderQty?.toString().includes(filters.OrderQty);
+      // const DelQtyMatch = row.DelQty?.toString().includes(filters.DelQty);
+
+
+      return (
+        SorderNoMatch &&
+       CustNameMatch &&
+        DeliveryAddressMatch &&
+        CityMatch &&
+        CatlogCodeMatch &&
+      SupplierStoreMatch &&
+     TruckTypeDisplayMatch &&
+     CustOrderNoMatch
+        // UomMatch &&
+        // OrderQtyMatch &&
+        // DelQtyMatch &&
+        // CustOrderNoMatch &&
+        //  CatlogCodeMatch &&
+        // DateRequiredMatch
+        // StatusMatch &&
+        // TruckTypeMatch &&
+        // TruckAllocMatch &&
+        // CustOrderNoMatch &&
+        // WaitingFlgMatch &&
+        // OrderDateMatch
+      );
+    })
+  : [];
+
+
+
+  
+
+  const handleFilterChange = (key, value) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      jobPlanFilter: {
+        ...prevFilters.jobPlanFilter,
+        [key]: value,
+      },
+    }));
   };
 
   // const columnDefinitions = [
@@ -324,6 +405,9 @@ console.log("data",data)
   //   ActiveColumns?.includes(col.id)
   // );
   return (
+    <div>
+
+   
     <div className="dividercards" style={{}}>
         
      
@@ -625,60 +709,98 @@ console.log("data",data)
             }}
           >
             <tr>
+            {ActiveColumns?.includes("Sel") && (
+               <th
+               
+                colSpan="1"
+                style={{
+                 
+                  backgroundColor: "rgba(247, 247, 247, 0.923)",
+                  //border: "2px solid white",
+                }}
+              ></th>
+            )}
+            {ActiveColumns?.includes("Order No") && (
             <th style={{ width: "90px" }}>
                 <input
-                  type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  type="text" 
+                  placeholder="order no"
+                value={filters?.SorderNo}
+   onChange={(e) => handleFilterChange("SorderNo", e.target.value)}
                   style={{ width: "100%" }}
                 />
               </th>
+            )}
+  {ActiveColumns?.includes("Customer Details") && (
               <th style={{ width: "90px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="Customer Name"
+                  value={filters?.CustName}
+   onChange={(e) => handleFilterChange("CustName", e.target.value)}
                   style={{ width: "100%" }}
                 />
               </th>
-              <th style={{ width: "100px" }}>
-                <input
-                  type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
-                  style={{ width: "100%" }}
-                />
-              </th>
-              <th style={{ width: "80px" }}>
-                <input
-                  type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
-                  style={{ width: "100%" }}
-                />
-              </th>
+              )}
+                {ActiveColumns?.includes("Time Required") && (
+              // <th style={{ width: "100px" }}>
+              //   <input
+              //     type="text"
+              //     placeholder="Time Req"
+              //     value={filters?.DeliveryTime}
+              //     onChange={(e) => handleFilterChange("DeliveryTime", e.target.value)}
+              //     style={{ width: "100%" }}
+              //   />
+              // </th>
+              <th
+              colSpan="1"
+              style={{
+                
+                backgroundColor: "rgba(247, 247, 247, 0.923)",
+                //border: "2px solid white",
+              }}
+            ></th>
+                )}
+                  {ActiveColumns?.includes("Loading Time") && (
+              // <th style={{ width: "80px" }}>
+              //   <input
+              //     type="text"
+              //     placeholder="Loading Time"
+              //     value={filters?.DeliveryEndTime}
+              //     onChange={(e) => handleFilterChange("DeliveryEndTime", e.target.value)}
+              //     style={{ width: "100%" }}
+              //   />
+              // </th>
+               <th
+               colSpan="1"
+               style={{
+                 
+                 backgroundColor: "rgba(247, 247, 247, 0.923)",
+                 //border: "2px solid white",
+               }}
+             ></th>
+            
+            )}
+              {ActiveColumns?.includes("Delivery Address") && (
               <th style={{ width: "0px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="Delivery Address"
+                  value={filters?.DeliveryAddress}
+                  onChange={(e) => handleFilterChange("DeliveryAddress", e.target.value)}
                   style={{ width: "100%" }}
                 />
-              </th>
+              </th>)}
+              {ActiveColumns?.includes("Suburb") && (
               <th style={{ width: "0px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="City"
+                  value={filters?.Suburb}
+                  onChange={(e) => handleFilterChange("Suburb", e.target.value)}
                   style={{ width: "100%" }}
                 />
-              </th>
+              </th>)}
               <th
                 colSpan="4"
                 style={{
@@ -687,33 +809,37 @@ console.log("data",data)
                   //border: "2px solid white",
                 }}
               ></th>
+{ActiveColumns?.includes("Material") && (
               <th style={{ width: "100px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="Product "
+                  value={filters?.CatlogCode}
+                  onChange={(e) => handleFilterChange("CatlogCode", e.target.value)}
                   style={{ width: "100%" }}
                 />
-              </th>
+              </th>)}
+              {ActiveColumns?.includes("Quarry") && (
+
               <th style={{ width: "100px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="Supplier"
+                  value={filters?.SupplierStore}
+                  onChange={(e) => handleFilterChange("SupplierStore", e.target.value)}
                   style={{ width: "100%" }}
                 />
-              </th>
+              </th>)}
+              {ActiveColumns?.includes("Truck Type") && (
               <th style={{ width: "100px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="Truck Desc"
+                  value={filters?.TruckTypeDisplay}
+                  onChange={(e) => handleFilterChange("TruckTypeDisplay", e.target.value)}
                   style={{ width: "100%" }}
                 />
-              </th>
+              </th>)}
               <th
                 colSpan="3"
                 style={{
@@ -722,15 +848,17 @@ console.log("data",data)
                   //border: "2px solid white",
                 }}
               ></th>
+               {ActiveColumns?.includes("Customer Order No") && (
               <th style={{ width: "100px" }}>
                 <input
                   type="text"
-                  placeholder=""
-                  // value={filters.Code}
-                  //onChange={(e) => handleFilterChange("Code", e.target.value)}
+                  placeholder="Cust Order NO"
+                  
+                  value={filters?.CustOrderNo}
+                  onChange={(e) => handleFilterChange("CustOrderNo", e.target.value)}
                   style={{ width: "100%" }}
                 />
-              </th>
+              </th>)}
 
               <th
                 colSpan="5"
@@ -861,7 +989,7 @@ console.log("data",data)
 
               {ActiveColumns?.includes("Order Qty") && (
                 <th
-                  style={{ width: "100px" }}
+                  style={{ width: "150px" }}
                   onClick={() => handleSort("Product_tot")}
                   onMouseEnter={() => setSortIconVisibility(true)}
                   onMouseLeave={() => setSortIconVisibility(false)}
@@ -877,11 +1005,11 @@ console.log("data",data)
               )}
 
               {ActiveColumns?.includes("Del Qty") && (
-                <th style={{ width: "100px" }}>Del Qty</th>
+                <th style={{ width: "150px" }}>Del Qty</th>
               )}
 
               {ActiveColumns?.includes("Bal Qty") && (
-                <th style={{ width: "80px" }}>Bal Qty</th>
+                <th style={{ width: "150px" }}>Bal Qty</th>
               )}
 
               {ActiveColumns?.includes("Material") && (
@@ -905,7 +1033,8 @@ console.log("data",data)
               )}
 
               {ActiveColumns?.includes("Truck Allocation") && (
-                <th style={{ width: "100px" }}>Truck Allocation</th>
+ <th style={{ maxWidth: "250px", minWidth: "50px", wordWrap: "break-word", textAlign: "center" }}>
+                  Truck Allocation</th>
               )}
 
               {ActiveColumns?.includes("Customer Order No") && (
@@ -932,13 +1061,18 @@ console.log("data",data)
 
             {
             //!loading &&
-              (JobplanData?.length > 0 ? (
-                // sortByColumn(
-                //   selectedProducttableData,
-                //   sortedColumn,
-                //   sortOrder
-                // )
-                JobplanData.map((item, index) => {
+              (JobplanData?.length > 0 ? 
+                
+                
+                (
+                
+                sortByColumn(
+                  filteredData,
+                  sortedColumn,
+                  sortOrder
+                )
+                .map((item, index) => {
+
                   return (
                     <tr
                       key={index}                    
@@ -948,22 +1082,32 @@ console.log("data",data)
                           : ""
                       } ${
                         doubleClickedRow === index ? "double-clicked-row" : ""
+                        // doubleClickedRow === index ? "userselectedrows_job" : ""
                       }`}
                       style={{
-                        fontSize: "9px",
-                        fontWeight: "",
+                        fontSize: 15,
+                        fontWeight: 600,
                         // fontFamily:"Open Sans",
                         height: "5px",
                         textAlign: "left",
                         marginBottom: "0px",
                         padding: "0px",
                         marginTop: "0px",
+                        color:
+                        doubleClickedRow === index &&
+                        selectedRows.includes(index)
+                          ? "#272829" // Combined condition for double-clicked and selected
+                          : doubleClickedRow === index
+                          ? "white" // Background for double-clicked row
+                          : selectedRows.includes(index),
+                         
+                       
                         backgroundColor:
                           doubleClickedRow === index &&
                           selectedRows.includes(index)
                             ? "#272829" // Combined condition for double-clicked and selected
                             : doubleClickedRow === index
-                            ? "#ffa726" // Background for double-clicked row
+                            ? "rgb(64, 62, 62)" // Background for double-clicked row
                             : selectedRows.includes(index)
                             ? "rgb(42, 77, 95)" // Background for selected rows
                             : getHighlightColor(item.Status) || "transparent", // Default highlight color or fallback
@@ -1060,32 +1204,32 @@ console.log("data",data)
                       )}
 
                       {ActiveColumns?.includes("Order Qty") && (
-                        <td style={{ borderRight: "1px solid grey" }}>
-                          {item && item.OrderQty ? item.OrderQty : ""}
+                        <td style={{ borderRight: "1px solid grey" , textAlign:"right", paddingRight:"3px" }}>
+                          {item && item.OrderQty ? item.OrderQty.toFixed(2) : "0.00"}
                         </td>
                       )}
 
                       {ActiveColumns?.includes("Del Qty") && (
-                        <td style={{ borderRight: "1px solid grey" }}>
-                          {item && item.DelQty ? item.DelQty : ""}
+                        <td style={{ borderRight: "1px solid grey", textAlign:"right" , paddingRight:"3px" }}>
+                          {item && item.DelQty ? item.DelQty.toFixed(2): "0.00"}
                         </td>
                       )}
 
                       {ActiveColumns?.includes("Bal Qty") && (
-                        <td style={{ borderRight: "1px solid grey" }}>
-                          {item && item.BoQty ? item.BoQty : ""}
+                        <td style={{ borderRight: "1px solid grey", textAlign:"right" , paddingRight:"3px"}}>
+                          {item && item.BoQty ? item.BoQty.toFixed(2) : "0.00"}
                         </td>
                       )}
 
                       {ActiveColumns?.includes("Material") && (
                         <td style={{ borderRight: "1px solid grey" }}>
-                          {item && item.CatlogCode ? item.CatlogCode : ""}
+                          {item && item.CatlogCode ? item.CatlogCode : "N/A"}
                         </td>
                       )}
 
                       {ActiveColumns?.includes("Quarry") && (
                         <td style={{ borderRight: "1px solid grey" }}>
-                          {item && item.SupplierStore ? item.SupplierStore : ""}
+                          {item && item.SupplierStore ? item.SupplierStore : "N/A"}
                         </td>
                       )}
 
@@ -1093,7 +1237,7 @@ console.log("data",data)
                         <td style={{ borderRight: "1px solid grey" }}>
                           {item && item.TruckTypeDisplay
                             ? item.TruckTypeDisplay
-                            : ""}
+                            : "N/A"}
                         </td>
                       )}
 
@@ -1110,7 +1254,7 @@ console.log("data",data)
                       )}
 
                       {ActiveColumns?.includes("Truck Allocation") && (
-                        <td style={{ borderRight: "1px solid grey" }}>
+                         <td style={{ borderRight: "1px solid grey", textAlign: "left", maxWidth: "280px", minWidth: "250px", wordWrap: "break-word" }}>
                           {item && item.TruckAlloc ? item.TruckAlloc : ""}
                         </td>
                       )}
@@ -1305,6 +1449,7 @@ console.log("data",data)
           </div>
         </CCol>
       </CRow>
+    </div>
     </div>
   );
 }

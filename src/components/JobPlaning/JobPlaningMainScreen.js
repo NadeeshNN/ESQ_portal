@@ -55,6 +55,12 @@ import { TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import SaveIcon from '@mui/icons-material/Save';
+import DivertOrderScreen from "./DivertOrderScreen";
+import CarterSelection from "./popupScreens/CarterSelection";
+import QuarrySelction from "./popupScreens/QuarrySelction";
+import TruckTypeSelection from "./popupScreens/TruckTypeSelection";
+import Draggable from "react-draggable";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -108,18 +114,19 @@ const overlayStyle = {
   right: 0,
   bottom: 0,
   background: "rgba(0, 0, 0, 0.7)",
-  backdropFilter: "blur(5px)", // Adjust the blur radius as needed
+ // backdropFilter: "blur(5px)", // Adjust the blur radius as needed
   WebkitBackdropFilter: "blur(5px)", // For Safari
   zIndex: 9999999,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  borderRadius:"8px"
 };
 export default function JobPlaningMainScreen() {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [selectedComponent, setSelectedComponent] = useState(null);
+  const [selectedComponent, setSelectedComponent] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
   const [columnsize, setColumnsize] = useState(9);
   const [docketcolumnsize, setdocketColumnsize] = useState(3);
@@ -139,9 +146,13 @@ export default function JobPlaningMainScreen() {
   const [alertTitle, setAlertTitle] = useState("");
   const [JobplanData, setJobplanData] = useState([]);
   const [dockectDetailTableData, setdocketTableData] = useState([]);
+  const [divertTableData, setdivertTableData] = useState([]);
   const [selectedRowEquipedCode, setSelectedRowEquipedCode] = useState([]);
   const [selectedRowJobdata, setSelectedRowJobdata] = useState([]);
+  const [bulkAllocationData, setBulkAllocationData] = useState([]);
+  const [SorderNO, setSorderNO] = useState("");
   const [jobstatus, setJobStatus]  = useState("1");
+  const [doubleClickedRow, setDoubleClickedRow] = useState(null);
   const [regionFilters, setRegionFilters] = useState({
     AllRegion: true,
     NoRegion: false,
@@ -150,7 +161,7 @@ export default function JobPlaningMainScreen() {
     SouthRegion: false,
     NorthRegion: false,
   });
-  const today = moment().format("DD-MM-YYYY");
+  const today = moment().format("YYYY-MM-DD");
   const [filters, setFilters] = useState({
     jobPlanFilter: {
       SorderNo: 0,
@@ -175,6 +186,7 @@ export default function JobPlaningMainScreen() {
     HideCompletedJob: false,
   });
   const [selectedValue, setSelectedValue] = useState("");
+  const [selectedDateRange, setSelectedDateRange] = useState("1");
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -197,7 +209,7 @@ export default function JobPlaningMainScreen() {
   // };
   const handleDateChange = (name, newValue) => {
     // Format the date to "DD-MM-YYYY"
-    const formattedDate = moment(newValue).format("DD-MM-YYYY");
+    const formattedDate = moment(newValue).format("YYYY-MM-DD");
   
     setFilters((prevFilters) => {
       const updatedFilters = {
@@ -215,9 +227,10 @@ export default function JobPlaningMainScreen() {
       return updatedFilters;
     });
   };
-  
+  // api calls 
+
   const GetgetJobplanDetail = () => {
-    setJobplanData([])
+    // setJobplanData([])
     setLoading(true);
     fetch(`${API_URL}jobplan/getJobplanDetail`, {
       method: "POST",
@@ -231,9 +244,16 @@ export default function JobPlaningMainScreen() {
       .then((data) => {
         const Data = data.ResultSet[0];
         const jobplanData = Data?.JobPlanDetailList;
-        console.log("array", jobplanData);
+      
         setJobplanData(jobplanData);
-
+        
+        jobplanData.forEach((item, index) => {
+          if (index === doubleClickedRow) {
+            setSelectedRowJobdata(item);
+          }
+        });
+      
+      
         //setProductTabledata(productTableData);
         setLoading(false);
       })
@@ -242,6 +262,270 @@ export default function JobPlaningMainScreen() {
         setLoading(false);
       });
   };
+
+  const GetgetAsignDocket = (allocationTruckObj) => {
+    // selectedRowJobdata.Check= true;
+    const assignDocketModel= {
+      "DocketList": dockectDetailTableData,
+      "JobDetail": selectedRowJobdata,
+      "AllocationTruck":allocationTruckObj,
+      "PageIndex": 1
+    }
+
+    setLoading(true);
+    fetch(`${API_URL}jobplan/assignDocket`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    body: JSON.stringify(assignDocketModel),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const status = data.ReturnStatus;
+        const msg = data.ReturnMessage;
+       
+     if (status){
+      setAlertType("info");
+      setAlertMessage(msg);
+      setShowAlert(true);
+      GetDocketDetailTableData(SorderNO,selectedRowJobdata)
+      setTimeout(() => {
+        GetgetJobplanDetail()
+      }, 2000);
+    
+      setLoading(false);
+     }
+     else{
+      setAlertType("error");
+      setAlertMessage(msg);
+      setShowAlert(true);
+     }
+        
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+      });
+  };
+  const saveDocket = () => {
+    const saveObject ={
+      "HireDocketModel": 
+        dockectDetailTableData
+      ,
+      "SorderDetailModel": selectedRowJobdata,
+      "sheetNumber": 1
+    }
+    setLoading(true);
+    fetch(`${API_URL}jobplan/saveDocket`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(saveObject),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        
+        const status = data.ReturnStatus;
+        const msg = data.ReturnMessage;
+     
+     if (status){
+      setAlertType("info");
+      setAlertMessage(msg);
+      setShowAlert(true);
+      setLoading(false);
+     }
+     else{
+      setAlertType("error");
+      setAlertMessage(msg);
+      setShowAlert(true);
+     }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+      });
+  };
+  const DeleteDocket = (docketData) => {
+    const DeleteObject ={
+      "HireDocketModel": 
+        dockectDetailTableData
+      ,
+      "SorderDetailModel": selectedRowJobdata,
+      "sheetNumber": 1
+    }
+    setLoading(true);
+    fetch(`${API_URL}jobplan/deleteDocketSub`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(DeleteObject),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const status = data.ReturnStatus;
+        const msg = data.ReturnMessage;
+       
+     if (status){
+      setAlertType("info");
+      setAlertMessage(msg);
+      setShowAlert(true);
+      GetDocketDetailTableData(SorderNO,selectedRowJobdata)
+      setLoading(false);
+     }
+     else{
+      setAlertType("error");
+      setAlertMessage(msg);
+      setShowAlert(true);
+     }
+
+        //setProductTabledata(productTableData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+       // setShowAlert(true);
+      });
+  };
+  const GetDocketDetailTableData = (sorderno, item) => {
+    setLoading(true);
+    //154417
+    fetch(
+      `${API_URL}jobplan/getDocketDetail?pageIndex=1&sorderNoReq=${sorderno}&supplierStoreReq=${item.SupplierStore}&truckTypeReq=${item.TruckType}&catlogCodeReq=${item.CatlogCode}&custOrderNoReq=${item.CustOrderNo}&uomReq=${item.Uom}&orderQtyReq=${item.OrderQty}
+   `,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        //body: JSON.stringify(filters),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const Data = data.ResultSet;
+        //const docketDetails = Data?.JobPlanDetailList;
+        setdocketTableData(Data);
+        // ignore item.DocketStatus="D"
+        const equipCodes = Data
+        .filter((item) => item.DocketStatus !== "D") // Exclude items with DocketStatus = "D"
+        .map((item) => item.EquipCode); // Map to extract EquipCode       
+        // Set EquipCode in the selected row state
+        setSelectedRowEquipedCode(equipCodes);
+        // 
+        //setProductTabledata(productTableData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setSelectedRowEquipedCode([]);
+
+        setLoading(false);
+        
+      });
+  };
+  const GetBulkAllocationData = (AllocationData) => {
+    const bulkObject =
+    {
+      "SorderNo": SorderNO,
+      "CatlogCode": selectedRowJobdata?.CatlogCode,
+      "TruckType": selectedRowJobdata?.TruckType,
+      "SupplierStore": selectedRowJobdata?.SupplierStore,
+      "Allocation": AllocationData
+    }
+    setLoading(true);
+    fetch(`${API_URL}jobplan/createDocketTemplate`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bulkObject),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const status = data.ReturnStatus;
+        const msg = data.ReturnMessage;
+        setBulkAllocationData(data)
+     if (status){
+      // setAlertType("info");
+      // setAlertMessage(msg);
+      // setShowAlert(true);
+      // GetDocketDetailTableData(SorderNO,selectedRowJobdata)
+      setLoading(false);
+     }
+     else{
+      // setAlertType("error");
+      // setAlertMessage(msg);
+      // setShowAlert(true);
+     }
+
+        //setProductTabledata(productTableData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+       // setShowAlert(true);
+      });
+  };
+  const GetDivertTableData = (docketData) => {
+    const DeleteObject ={
+      "HireDocketModel": 
+        dockectDetailTableData
+      ,
+      "SorderDetailModel": selectedRowJobdata,
+      "curPageIndexl": 1
+    }
+    setLoading(true);
+    fetch(`${API_URL}jobplan/divertDocketSubBtn`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(DeleteObject),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const status = data.ReturnStatus;
+        const msg = data.ReturnMessage;
+        setdivertTableData(data)
+    //  if (status){
+    //   setAlertType("info");
+    //   setAlertMessage(msg);
+    //   setShowAlert(true);
+     
+    //   setLoading(false);
+    //  }
+    //  else{
+    //   setAlertType("error");
+    //   setAlertMessage(msg);
+    //   setShowAlert(true);
+    //  }
+
+        //setProductTabledata(productTableData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setLoading(false);
+       // setShowAlert(true);
+      });
+  };
+// end api calls 
+
+
+
   const handleToggleCollapse = () => {
     setIsCollapsed(!isCollapsed); // Toggle collapse state
   };
@@ -294,7 +578,7 @@ export default function JobPlaningMainScreen() {
       name: "Bulk Allocation",
       floatbtnAction: () =>
         //toggleTabSide(1)
-        handleButtonClick(BulkAllocation),
+        handleButtonClick("BulkAllocation"),
     },
     {
       icon: <PublishedWithChangesIcon />,
@@ -315,7 +599,7 @@ export default function JobPlaningMainScreen() {
     const selectedRegions =
       typeof value === "string" ? value.split(",") : value;
   
-    console.log("selectedRegions:", selectedRegions);
+  
   
     let updatedRegions = [...selectedRegions];
   
@@ -345,18 +629,31 @@ export default function JobPlaningMainScreen() {
     // Update state
     setRegionName(updatedRegions);
   
-    const newRegionFilters = {
-      AllRegion: updatedRegions.includes("ALL REGION"),
-      NoRegion: updatedRegions.includes("NO REGION"),
-      EastRegion: updatedRegions.includes("EAST"),
-      WestRegion: updatedRegions.includes("WEST"),
-      SouthRegion: updatedRegions.includes("SOUTH"),
-      NorthRegion: updatedRegions.includes("NORTH"),
-    };
+    // const newRegionFilters = {
+    //   AllRegion: updatedRegions.includes("ALL REGION"),
+    //   NoRegion: updatedRegions.includes("NO REGION"),
+    //   EastRegion: updatedRegions.includes("EAST"),
+    //   WestRegion: updatedRegions.includes("WEST"),
+    //   SouthRegion: updatedRegions.includes("SOUTH"),
+    //   NorthRegion: updatedRegions.includes("NORTH"),
+    // };
+
   
-    setRegionFilters(newRegionFilters);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      regionFilter: {
+        ...prevFilters.regionFilter,
+        AllRegion: updatedRegions.includes("ALL REGION"),
+        NoRegion: updatedRegions.includes("NO REGION"),
+        EastRegion: updatedRegions.includes("EAST"),
+        WestRegion: updatedRegions.includes("WEST"),
+        SouthRegion: updatedRegions.includes("SOUTH"),
+        NorthRegion: updatedRegions.includes("NORTH"),
+      },
+    }));
+    
   
-    console.log("Updated Regions:", updatedRegions);
+   
   };
   
 
@@ -394,51 +691,149 @@ export default function JobPlaningMainScreen() {
   };
 
   const handleButtonClick = (component) => {
-    setSelectedComponent(() => component); // Set the selected component
+    setSelectedComponent(component); // Set the selected component
     setPopupVisible(true);
+
+
     // Show the popup
   };
-  const handlejobplaningtableDoubleclick = (sorderno, item) => {
-    console.log("sorderno", sorderno, item);
+
+  const handleBulkAllocationButtonClick = (component,rowData) => {
+    console.log(rowData)
+    setSelectedComponent(component); // Set the selected component
+    console.log('selectedRowJobdata:', selectedRowJobdata.length);
+    if(selectedRowJobdata.length !=0)
+    {  GetBulkAllocationData(rowData)}
+
+  
+    setPopupVisible(true);
+
+
+    // Show the popup
+  };
+
+
+
+
+  const handleDivertClick = () => {
+
+
+    setSelectedComponent("DivertOrderScreen"); // Set the selected component
+    setPopupVisible(true);
+    if(selectedRowJobdata.length !=0)
+      {  GetDivertTableData()}
+  
+    // Show the popup
+  };
+  const handlejobplaningtableDoubleclick = (sorderno, item, index) => {
+    item.Check=true;
     setSelectedRowJobdata(item)
+    setSorderNO(sorderno)
+    setDoubleClickedRow(index)
     GetDocketDetailTableData(sorderno, item);    
-    setActiveTabSide(1); // change the view after double click on the row
+    //setActiveTabSide(1); // change the view after double click on the row
   };
-  const GetDocketDetailTableData = (sorderno, item) => {
-    setLoading(true);
-    //154417
 
-    fetch(
-      `${API_URL}jobplan/getDocketDetail?pageIndex=1&sorderNoReq=${sorderno}&supplierStoreReq=${item.SupplierStore}&truckTypeReq=${item.TruckType}&catlogCodeReq=${item.CatlogCode}&custOrderNoReq=${item.CustOrderNo}&uomReq=${item.Uom}&orderQtyReq=${item.OrderQty}
-   `,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        //body: JSON.stringify(filters),
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const Data = data.ResultSet;
-        //const docketDetails = Data?.JobPlanDetailList;
-        console.log(Data);
-        setdocketTableData(Data);
+  const handlestatusForcecomplete =()=>{
+      setFilters((prevFilters) => ({
+            ...prevFilters,
+            completedJobToggle: 2, // Update the corresponding date field (dateFrom or dateTo)
+          }));
+      // setJobStatus(value); 
+  }
 
-        const equipCodes = Data.map((item) => item.EquipCode); // Adjust the key to match your data structure
-        // Set EquipCode in the selected row state
-        setSelectedRowEquipedCode(equipCodes);
-        //setProductTabledata(productTableData);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.message);
-        setLoading(false);
-        
-      });
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    setSelectedDateRange(value);
+
+    let startDate = moment();
+    let endDate = moment();
+
+    if (value === "1") {
+      // Today
+      startDate = moment();
+      endDate = moment();
+    } else if (value === "2") {
+      // This Week
+      startDate = moment().startOf("week");
+      endDate = moment().endOf("week");
+    } else if (value === "3") {
+      // This Month
+      startDate = moment().startOf("month");
+      endDate = moment().endOf("month");
+    }
+    setFilters((prev) => ({
+      ...prev,
+      dateFrom: startDate.format("YYYY-MM-DD"),
+      dateTo: endDate.format("YYYY-MM-DD"),
+    }));
+
+   
   };
+
+
+
+  // default save 
+  const jobStatusLabels = {
+    1: "Show All",
+    2: "Show Active Jobs",
+    3: "Show Completed Jobs",
+  };
+  
+  const dateRangeLabels = {
+    1: "Today",
+    2: "Week",
+    3: "Month",
+  };
+  
+  useEffect(() => {
+    const savedFilters = localStorage.getItem("savedFilters");
+  
+    if (savedFilters) {
+      const parsedFilters = JSON.parse(savedFilters);
+  
+      setSelectedDateRange(
+        Object.keys(dateRangeLabels).find(
+          (key) => dateRangeLabels[key] === parsedFilters.selectedDateRange
+        )
+      );
+  
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        completedJobToggle: Object.keys(jobStatusLabels).find(
+          (key) => jobStatusLabels[key] === parsedFilters.jobstatus
+        ),
+      }));
+  
+      setRegionName(parsedFilters.regionname || []);
+    }
+  }, []);
+  
+  const handleSaveDefaults = () => {
+    const dataToSave = {
+      selectedDateRange: dateRangeLabels[selectedDateRange] || "Custom",
+      jobstatus: jobStatusLabels[filters.completedJobToggle] || "Unknown",
+      regionname: regionname,
+    };
+  
+    localStorage.setItem("savedFilters", JSON.stringify(dataToSave));
+    setAlertType("success");
+    setAlertMessage("Data successfully saved");
+    setShowAlert(true);
+  }; 
+  //default save 
+
+  const handleAssigndocktrowclick=(row)=>{
+     GetgetAsignDocket(row)
+    // setdocketTableData("")
+  }    
+  const handleDeleteAssignedDockect =(row)=>{
+    DeleteDocket()
+  }
+  const handleSaveDockect =(row)=>{
+    saveDocket()
+  }
+
 
   return (
     <div className="jobPlaningcard">
@@ -616,12 +1011,28 @@ export default function JobPlaningMainScreen() {
 
         {popupVisible && selectedComponent && (
           <div style={overlayStyle} onClick={() => closePopup()}>
+             <Draggable>
             <div onClick={(e) => e.stopPropagation()}>
               {/* Render the selected component */}
-              {selectedComponent === BulkAllocation && (
-                <BulkAllocation onClose={closePopup} />
+              {selectedComponent === "BulkAllocation" && (
+                <BulkAllocation onClose={closePopup}  bulkAllocationData={bulkAllocationData} />
               )}
+               {selectedComponent === "DivertOrderScreen" && (
+                <DivertOrderScreen onClose={closePopup} divertTableData={divertTableData}/>
+              )}
+              {selectedComponent === "CarterSelection" && (
+                <CarterSelection onClose={closePopup} />
+              )}
+              {selectedComponent === "QuarrySelction" && (
+                <QuarrySelction onClose={closePopup} />
+              )}
+              {selectedComponent === "TruckTypeSelection" && (
+                <TruckTypeSelection onClose={closePopup} />
+              )}
+              
             </div>
+            </Draggable>
+     
           </div>
         )}
         <div className="dividercards">
@@ -659,7 +1070,7 @@ export default function JobPlaningMainScreen() {
                       <div
         className="flex items-center justify-center bg-black text-white p-2 rounded-md cursor-pointer  w-16 h-8 transition-all duration-300 ease-in-out transform hover:bg-gray-700 shadow-lg hover:shadow-xl"
         style={{ width: "54px", }} // Rectangle shape
-       // onClick={() => GetDatafromCustomerCode()}
+        onClick={handleSaveDefaults}
       >
         <SaveIcon />
       </div></Tooltip>
@@ -695,9 +1106,21 @@ export default function JobPlaningMainScreen() {
         {/* Material UI DatePicker for Date From */}
         <DatePicker
           label="Job start"
-          value={moment(filters.dateFrom, "DD-MM-YYYY").toDate()} // Convert "DD-MM-YYYY" to Date
+          value={moment(filters.dateFrom, "YYYY-MM-DD").toDate()} // Convert "DD-MM-YYYY" to Date
           onChange={(newValue) => handleDateChange("dateFrom", newValue)} // Handle change
-          renderInput={(params) => <TextField {...params} size="small" className="inputtextdark" />}
+          renderInput={(params) => <TextField {...params} size="small" className="inputtextdark" 
+          
+          
+          sx={{
+            "& .MuiInputBase-input": {
+              fontSize: "13px",  // Input text size
+            },
+            "& .MuiInputLabel-root": {
+              fontSize: "16px",  // Label size
+            },
+          }}/>
+        }
+          
         />
 
         <span>-</span>
@@ -705,9 +1128,25 @@ export default function JobPlaningMainScreen() {
         {/* Material UI DatePicker for Date To */}
         <DatePicker
           label="Job end"
-          value={moment(filters.dateTo, "DD-MM-YYYY").toDate()} // Convert "DD-MM-YYYY" to Date
+          value={moment(filters.dateTo, "YYYY-MM-DD").toDate()} // Convert "DD-MM-YYYY" to Date
           onChange={(newValue) => handleDateChange("dateTo", newValue)} // Handle change
-          renderInput={(params) => <TextField {...params} size="small" className="inputtextdark" />}
+          renderInput={(params) => <TextField {...params} size="small" className="inputtextdark"
+          
+          sx={{
+            "& .MuiInputBase-input": {
+              fontSize: "13px",  // Input text size
+            },
+            "& .MuiInputLabel-root": {
+              fontSize: "16px",  // Label size
+            },
+            // "& .css-i4bv87-MuiSvgIcon-root":{
+            //   width:"10px",
+            //   height:"10px"
+            // }
+          }}/>
+        
+        }
+         
         />
     
     </LocalizationProvider>
@@ -718,7 +1157,16 @@ export default function JobPlaningMainScreen() {
         className="flex items-center justify-center bg-black text-white p-2 rounded-md cursor-pointer mr-2 w-16 h-8 transition-all duration-300 ease-in-out transform hover:bg-gray-700 shadow-lg hover:shadow-xl"
         style={{ width: "64px", height: "32px" }} // Rectangle shape
       >
-        <ArrowBackIcon />
+        <ArrowBackIcon  
+        onClick={() => 
+          setFilters((prevFilters) => ({
+            ...prevFilters,
+            dateFrom: moment(prevFilters.dateFrom)
+              .add(-1, "days")
+              .format("YYYY-MM-DD"), // Update dateFrom correctly
+          }))
+        } 
+          />
       </div>
 
       {/* Right Arrow Button */}
@@ -726,7 +1174,17 @@ export default function JobPlaningMainScreen() {
         className="flex items-center justify-center bg-black text-white p-2 rounded-md cursor-pointer ml-2 w-16 h-8 transition-all duration-300 ease-in-out transform hover:bg-gray-700 shadow-lg hover:shadow-xl"
         style={{ width: "64px", height: "32px" }} // Rectangle shape
       >
-        <ArrowForwardIcon />
+        <ArrowForwardIcon 
+       onClick={() => 
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          dateTo: moment(prevFilters.dateTo) // Fix: Use `prevFilters.dateFrom` instead of `filters.dateTo`
+            .add(1, "days")
+            .format("YYYY-MM-DD"),
+        }))
+      }
+        
+        />
       </div>
                     </div>
                     <div className="col-lg-1 d-flex align-items-center p-0 marginR5 ml-3">
@@ -758,8 +1216,10 @@ export default function JobPlaningMainScreen() {
         }}
           labelId="job-select-label"
           id="job-select"
-          value={selectedValue}
-          onChange={handleChange}
+          value={selectedDateRange} 
+          
+          //setSelectedDateRange
+           onChange={(e)=>{handleSelectChange(e)}}
           label="Select Job Status"
           className="inputtextdark"
         >
@@ -801,7 +1261,7 @@ export default function JobPlaningMainScreen() {
           // onChange={handleChangeJobStatus}
           onChange={(e) => {
             const value = e.target.value;
-            console.log("Selected value:", value);  // Check if it's being updated
+           
             setFilters((prevFilters) => ({
                   ...prevFilters,
                   completedJobToggle: value, // Update the corresponding date field (dateFrom or dateTo)
@@ -1032,6 +1492,7 @@ export default function JobPlaningMainScreen() {
                   <CCol md={columnsize} className="slideIn">
                     {loading && <LinearProgress style={{ width: "100%" }} />}
                     <JobPlaningMainTable
+                    handlestatusForcecomplete={handlestatusForcecomplete}
                       ActiveColumns={personName}
                       regionFilters={regionFilters}
                       handlejobplaningtableDoubleclick={
@@ -1041,6 +1502,8 @@ export default function JobPlaningMainScreen() {
                         userselectedrowinjobplaintable
                       }
                       JobplanData={JobplanData}
+                      filters={filters.jobPlanFilter}
+                      setFilters={setFilters}
                     />
                     {/* <TestTable  rowData={JobplanData}
                    handlejobplaningtableDoubleclick={handlejobplaningtableDoubleclick}/> */}
@@ -1121,9 +1584,13 @@ export default function JobPlaningMainScreen() {
                         >
                           {docketcolumnsize === 3 && (
                             <Carter_details
-                            JobplanData={JobplanData}
+                            // JobplanData={JobplanData}
                             selectedRowEquipedCode={selectedRowEquipedCode}
                             selectedRowJobdata={selectedRowJobdata}
+                            handleBulkAllocationButtonClick={handleBulkAllocationButtonClick}
+                            handleAssigndocktrowclick={handleAssigndocktrowclick}
+                            handleDeleteAssignedDockect={handleDeleteAssignedDockect}
+                           
                             />
                           )}
                         </CTabPane>
@@ -1134,9 +1601,15 @@ export default function JobPlaningMainScreen() {
                         >
                           {docketcolumnsize === 3 && (
                             <DocketTable
+                            selectedRowJobdata={selectedRowJobdata}
+                              handleDivertClick = {handleDivertClick}
+                              handleButtonClick={handleButtonClick}
+                              handleSaveDockect ={handleSaveDockect}
+                              handleDeleteAssignedDockect={handleDeleteAssignedDockect}
                               dockectDetailTableData={
                                 dockectDetailTableData || []
                               }
+                              setdocketTableData={setdocketTableData}
                             />
                           )}
                         </CTabPane>
@@ -1422,7 +1895,20 @@ style={{ width: "54px", }} // Rectangle shape
   label="Job start"
   value={moment(filters.dateFrom, "DD-MM-YYYY").toDate()} // Convert "DD-MM-YYYY" to Date
   onChange={(newValue) => handleDateChange("dateFrom", newValue)} // Handle change
-  renderInput={(params) => <TextField {...params} size="small" className="inputtextdark" />}
+  renderInput={(params) => <TextField {...params} size="small" className="inputtextdark" 
+  sx={{
+    "& .MuiInputBase-input": {
+      fontSize: "13px",  // Input text size
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "16px",  // Label size
+    },
+  }}
+  />
+  
+  
+  
+  }
 />
 
 <span>-</span>
@@ -1432,7 +1918,17 @@ style={{ width: "54px", }} // Rectangle shape
   label="Job end"
   value={moment(filters.dateTo, "DD-MM-YYYY").toDate()} // Convert "DD-MM-YYYY" to Date
   onChange={(newValue) => handleDateChange("dateTo", newValue)} // Handle change
-  renderInput={(params) => <TextField {...params} size="small" className="inputtextdark" />}
+  renderInput={(params) => <TextField {...params} size="small" className="inputtextdark"
+  sx={{
+    "& .MuiInputBase-input": {
+      fontSize: "13px",  // Input text size
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "16px",  // Label size
+    },
+  }}
+
+  />}
 />
 
 </LocalizationProvider>
@@ -1526,7 +2022,7 @@ sx={{
   // onChange={handleChangeJobStatus}
   onChange={(e) => {
     const value = e.target.value;
-    console.log("Selected value:", value);  // Check if it's being updated
+  
     setFilters((prevFilters) => ({
           ...prevFilters,
           completedJobToggle: value, // Update the corresponding date field (dateFrom or dateTo)

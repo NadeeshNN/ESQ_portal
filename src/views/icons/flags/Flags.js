@@ -5,7 +5,7 @@ import { flagSet } from '@coreui/icons'
 import { DocsLink } from 'src/reusable'
 
 const CoreUIIcons = () => {
-  return (
+  return ( 
     <CCard>
       <CCardHeader>
         Flag Icons

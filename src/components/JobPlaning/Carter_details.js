@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { API_URL } from "src/components/util/config";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import AssignmentReturnedIcon from "@mui/icons-material/AssignmentReturned";
+import { Tooltip } from "@mui/material";
+import Nexgen_Alert from "../ReusableComponents_ESQ/Nexgen_Alert";
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,9 +19,29 @@ export default function Carter_details(props) {
     Code: props.customerCode || "",
     Description: "",
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
+
   const {selectedRowEquipedCode}= props;
-  const { JobplanData } = props;
-  const{selectedRowJobdata}=props;
+
+
+  
+
+
+  // const { JobplanData } = props;
+  const {selectedRowJobdata}=props;
+  const {
+    SorderNo = 0,
+    CatlogCode = "",
+    Uom = "",
+    SupplierStore = "",
+    TruckType = "",
+    OperationType = "Q",
+    CarterEquipCode = "",
+    BoQty= 0
+  } = selectedRowJobdata ?? {};
 
 
   const handleFilterChange = (column, value) => {
@@ -31,12 +54,21 @@ export default function Carter_details(props) {
     });
   };
 
+
+  useEffect(()=>{
+    setSelectedRows([]) 
+  },[selectedRowEquipedCode])
+  useEffect(()=>{
+    setSelectedRows([]) 
+  },[])
+
   useEffect(() => {
+    setSelectedRows([])
     const Token = localStorage.getItem("AccessToken");
     setLoading(true);
     // Fetch data from the API
     fetch(
-      `${API_URL}jobplan/loadCarterDetail?sorderNo=0&operationType=Q&uom=&catlogCode=&supplierStore=&truckType=&carterEquipCode=`,
+      `${API_URL}jobplan/loadCarterDetail?sorderNo=${SorderNo}&operationType=${OperationType}&uom=${Uom}&catlogCode=${CatlogCode}&supplierStore=${SupplierStore}&truckType=${TruckType}&carterEquipCode=${CarterEquipCode}`,
       {
         method: "GET",
         headers: {
@@ -58,15 +90,36 @@ export default function Carter_details(props) {
       .then((data) => {
         const datar = data.ResultSet;  
         setCarterDetails(datar)
+        // setAlertType("info");
+        // setAlertMessage(msg);
+        // setShowAlert(true);
         // Assuming data is an array of objects like you provided
         //setCarterDetails(contacts);
+        addEquipcodetoArray(datar)
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching data from the API:", error);
         setLoading(false);
       });
-  }, []);
+    
+
+     
+
+
+  }, [selectedRowJobdata]);
+
+const addEquipcodetoArray=(carterDetails)=>{
+
+  const equipCodesIndex = carterDetails
+  .map((item, index) => (selectedRowEquipedCode?.includes(item?.EquipCode) ? index : null)) // Map to indices or null
+  .filter((index) => index !== null); 
+  console.log("equipCodesIndex",equipCodesIndex)
+  setSelectedRows([...selectedRows, equipCodesIndex]);
+}
+
+
+
 
   // const filteredData = carterDetails
   //   ? carterDetails.filter((row) => {
@@ -87,16 +140,19 @@ export default function Carter_details(props) {
 
 
 
-  const handleRowClick = (custCode) => {
-    // Store the selected "Quote No" in session storage
-    //sessionStorage.setItem("selectedCustCode", custCode);
-    // if (props.onClose) {
-    //   props.onClose();
-    // }
-  };
+  // const handleRowCheck = (row) => {
+  //   props.handleAssigndocktrowclick(row)
 
-  const handleCheckboxClick = (index) => {
-    console.log("INDEX",selectedRowJobdata!=="",selectedRowJobdata)
+ 
+  // };
+
+  const handleCheckboxClick = (index,item) => {
+
+
+    // handleRowCheck(item,index)
+  
+
+
     if (selectedRowJobdata.length === 0) {
       window.alert("Please select the quote");
       // toast.info(("Please select the quote"), {
@@ -111,14 +167,32 @@ export default function Carter_details(props) {
       //   pauseOnFocusLoss: true,
       //   theme:"colored",
       // });
+      
       return;
     }
     if (selectedRows.includes(index)) {
       // Remove the row from the selected array if it's already selected
       setSelectedRows(selectedRows.filter((i) => i !== index));
+      item.Check = false;     
+      props.handleAssigndocktrowclick(item)
+     
+     
+     // props.handleDeleteAssignedDockect()
+
     } else {
-      // Add the row to the selected array
-      setSelectedRows([...selectedRows, index]);
+      if (selectedRowJobdata?.BoQty !=0) {
+        setSelectedRows([...selectedRows, index]);
+        item.Check = true;
+        props.handleAssigndocktrowclick(item)
+      } else if(selectedRowEquipedCode?.includes(item.EquipCode)){
+        item.Check = false;       
+        props.handleAssigndocktrowclick(item)
+      }
+      else{
+        setAlertType("error");
+        setAlertMessage("Can not Assign carter! Job is completed");
+        setShowAlert(true);
+      }
     }
   };
 
@@ -136,7 +210,12 @@ export default function Carter_details(props) {
     }
   };
 
-  
+  const  handleBulkAllocationbtnClick=(item)=>{
+  props.handleBulkAllocationButtonClick("BulkAllocation",item);
+  }
+
+
+
   return (
     // <CCard
     //   className="routehistoryGlass"
@@ -146,6 +225,14 @@ export default function Carter_details(props) {
     //   <CCardBody style={{ alignItems: "center" }}>
     // <div  style={{ justifyContent: "center" }}>
     <div className="dividercards">
+       {showAlert && (
+        <Nexgen_Alert
+          AlertTitle={alertTitle}
+          severity={alertType}
+          AlertMessage={alertMessage}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
       <div className="JObPlaningTables" style={{ width: "100%", overflowX: "auto" , maxWidth:"100%" , marginRight:"10px"}}>
         <table
           class="tableQt-ProductTable"
@@ -199,16 +286,19 @@ export default function Carter_details(props) {
               top: "-1",
               
             }}>
-              <th style={{ width: "10%" }}>sel</th>
+        
+              <th style={{ width: "10%" }}>Sel</th>
+            
+              
               <th style={{ width: "35%" }}>Cartor</th>
               <th style={{ width: "65%" }}>Location</th>
               <th style={{ width: "65%" }}>
-                Opera <br></br> type
+                Opera <br></br> Type
               </th>
               <th style={{ width: "75%"}}>Type</th>
-              <th style={{ width: "200px"}}></th>
+              <th style={{ width: "60%"}}>Options</th>
             </tr>
-          </thead>
+          </thead> 
           <tbody>
             {loading && (
               <tr>
@@ -223,12 +313,18 @@ export default function Carter_details(props) {
                   <tr
                     key={index}
                    
+                    // className={`siteThover-effect ${
+                    //   selectedRowEquipedCode?.includes(item.EquipCode)
+                    //     ? "doubleclicked_rows"
+                    //     : selectedRows.includes(index)
+                    //     ? "userselectedrows_job"
+                    //     : ""
+                    // }`}
                     className={`siteThover-effect ${
-                      selectedRowEquipedCode?.includes(item.EquipCode)
-                        ? "doubleclicked_rows"
-                        : selectedRows.includes(index)
+                      selectedRows?.includes(index)
                         ? "userselectedrows_job"
                         : ""
+                       
                     }`}
                     
                     style={{
@@ -239,8 +335,10 @@ export default function Carter_details(props) {
                       marginTop: "0px",
                      
                     }}
-                    onClick={() => handleCheckboxClick(index)}
+                  
+                    //onClick={() => handleRowCheck(item,index)}
                   >
+                    {/* {BoQty !=0 && */}
                     <td      
                         style={{
                           padding: "2px",
@@ -252,33 +350,43 @@ export default function Carter_details(props) {
                           type="checkbox"
                           checked={selectedRows.includes(index) 
                             || 
-                            selectedRowEquipedCode?.includes(item.EquipCode)
+                            selectedRowEquipedCode?.includes(item.EquipCode) // if checked then add that to selectedrow array
                             }
-                             // Sync checkbox state
+                            
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent row click event when clicking the checkbox
-                            handleCheckboxClick(index); // Trigger checkbox logic
+                            handleCheckboxClick(index,item); // Trigger checkbox logic
+                            
                           }} />
-                        {/* {item && item.Supplier_name && ( */}
+                      
 
-                        {/* )} */}
+                       
                       </td>  
-                      <td  style={{
-  backgroundColor: selectedRowEquipedCode?.includes(item.EquipCode)
-    ? "rgb(34, 35, 36)" // Background for rows in selectedRowEquipedCode
-    : selectedRows.includes(index)
-    ? "transparent" // Transparent background if the row is selected
-    : getHighlightColor(item.HighlightColor) || "transparent", // Apply highlight color or fallback
-  position: "relative", // Keeps the row positioned relatively
-  cursor: "pointer", //
-                      }}
-                      //  onMouseEnter={(e) => {
-                      //   e.currentTarget.style.backgroundColor = 'lightgray'; // Color on hover
-                      // }}
-                      // onMouseLeave={(e) => {
-                      //   // Reset to selected color or original highlight color on hover out
-                      //   e.currentTarget.style.backgroundColor =getHighlightColor(item.HighlightColor)
-                      // }}
+{/* } */}
+                      <td  
+  //                     style={{
+  // backgroundColor: selectedRowEquipedCode?.includes(item.EquipCode)
+  //   ? "rgb(34, 35, 36)" // Background for rows in selectedRowEquipedCode
+  //   : selectedRows.includes(index)
+  //   ? "transparent" // Transparent background if the row is selected
+  //   : getHighlightColor(item.HighlightColor) || "transparent", // Apply highlight color or fallback
+  // position: "relative", // Keeps the row positioned relatively
+  // cursor: "pointer", //
+                    //  }}
+                      style={{
+                        backgroundColor: selectedRows.includes(index)
+                          ? "transparent" // Background for rows in selectedRowEquipedCode
+                          : getHighlightColor(item.HighlightColor) || "transparent",
+                       
+                        position: "relative", // Keeps the row positioned relatively
+                        cursor: "pointer", //
+                                            }}
+
+
+
+
+
+                     
                        >
                       {item.EquipCode}</td>
                      <td>{item.Location}</td>
@@ -289,6 +397,20 @@ export default function Carter_details(props) {
                           textAlign: "center",
                           // borderRight: "1px solid grey",
                         }}>{item.Type}</td>      
+
+<td style={{
+                          padding: "2px",
+                          textAlign: "center",
+                          // borderRight: "1px solid grey",
+                        }}>{
+                          <Tooltip title="Bulk Allocation" arrow>
+    <AssignmentReturnedIcon 
+      fontSize="small"      // Smaller icon
+      style={{ fontSize: "14px" }} // Fine-tuned size
+      onClick={()=>handleBulkAllocationbtnClick(item)}
+    />
+  </Tooltip>
+                          }</td> 
 
                         {/* <td>
                         <Tooltip title="Bulk Allocation">

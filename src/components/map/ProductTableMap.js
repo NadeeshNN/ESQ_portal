@@ -89,16 +89,16 @@ const ProductTableMap = (props) => {
     });
     //setPolylinePath(results.routes.overview_path);
     //console.log("path", path);
-    console.log("results", results);
+    
   }
   function getRandomColor(index) {
     return ["#FF0000", "#00FF00", "#0000FF"][index % 3];
   }
   const handleRouteItemClick = (index, route) => {
     setPolylinePath(route.overview_path);
-    console.log("route", route);
+
     // Access the index variable here and perform any actions you need
-    console.log(`Clicked on route with index: ${index}`);
+   
     // You can set the index to your state or perform any other logic
     setArrayIdex(index);
   };

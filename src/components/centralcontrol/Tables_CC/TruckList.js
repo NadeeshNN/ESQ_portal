@@ -139,6 +139,7 @@ export default class TruckList extends Component {
         headerName: "Truck Code",
         sortable: true,
         headerAlign: "center",
+       // width: 123,
         headerClassName: "super-app-theme--header",
         cellClassName: (params) => {
           if (params.row.LoggedIn === 1) {
@@ -315,11 +316,11 @@ export default class TruckList extends Component {
             placeholder="Truck Code"
             value={truckCodeFilterValue}
             onChange={this.handleTruckCodeFilterChange}
-            style={{ width: "90px", fontSize: "11px" }}
+            style={{ width: "123px", fontSize: "11px" }}
           />
         </div>
         <div className="peerTableContainer">
-          <PeerTable2
+        <PeerTable2
             name="truck List"
             data={filteredData}
             pageSize={this.state.pageSize}
@@ -329,9 +330,32 @@ export default class TruckList extends Component {
             rowHeight={23}
             headerHeight={32}
             fontsize={12}
-            columns={this.state.columns}
+            componentsProps={{
+              pagination: {
+                sx: {
+                 
+                  "& .MuiSelect-select": {
+                  
+                    transform: "translateY(20%)",
+                  },
+                  
+                },
+              },
+            }}
+            columns={this.state.columns.map((col) => ({
+              ...col,
+             // flex: 1,        // Ensures columns grow proportionally
+             // minWidth: 100,  // Prevents columns from becoming too small
+             width: col.field === "TruckCode" ? 123 : undefined, // Fixed width for TruckCode
+  flex: col.field === "TruckCode" ? undefined : 1, 
+        
+            }))}
+           // columns={this.state.columns}
             headerClassName="peerTableHeader"
+
           />
+        
+
           <CRow
             className="mb-0"
             style={{
